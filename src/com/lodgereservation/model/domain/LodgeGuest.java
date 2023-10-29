@@ -1,38 +1,30 @@
 package com.lodgereservation.model.domain;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public class LodgeGuest extends Person {
 
-    private String address;                             //todo Address or ContactInfo object
-    //private ArrayList<Reservation> reservations;      //todo database instead?
-    Lodge lodge;
-
+    private final UUID ID;
     public LodgeGuest()  {
+        ID = UUID.randomUUID();
     }
 
-    public LodgeGuest(String fn, String ln, Lodge lodge) {
-        super.firstName = fn;
-        super.lastName = ln;
-        this.lodge = lodge;
-        this.address = null;
-        //reservations = new ArrayList<>();
+    public LodgeGuest(String firstName, String lastName, String address) {
+        super(firstName, lastName, address);
+        this.ID = UUID.randomUUID();
     }
 
     public boolean validate() {
-        if (!lodge.getGuests().contains(this)) {
-            //todo validate GUEST_ID
-            return false;
-        }
-        else if (this.firstName.isEmpty() || this.lastName.isEmpty()) {
-            return false;
+        if (ID != null && !firstName.isBlank() && !lastName.isBlank() && !address.isBlank()) {
+            return true;
         }
         return false;
     }
 
     @Override
     public String toString() {
-        return "Lodge guest name: " + this.firstName + " " + this.lastName;
+        return this.firstName + " " + this.lastName;
     }
 
     /**
@@ -53,14 +45,26 @@ public class LodgeGuest extends Person {
             result = false;
         } else {
             LodgeGuest lg = (LodgeGuest) obj;
-            result = (lg.getFirstName().equals(this.firstName) &&
-                    lg.getLastName().equals(this.lastName));
+            result = (lg.getFirstName().equals(firstName) &&
+                    lg.getLastName().equals(lastName));
         }
         return result;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.getFirstName(), this.getLastName());
+        return Objects.hash(firstName, lastName);
+    }
+
+    public UUID getID() {
+        return ID;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String addr) {
+        address = addr;
     }
 }

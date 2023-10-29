@@ -2,38 +2,37 @@ package com.lodgereservation.model.domain;
 
 import java.io.Serializable;
 import java.sql.Date;
-
-import static com.lodgereservation.model.domain.Lodge.NEXT_RES_ID;
+import java.util.UUID;
 
 public class Reservation implements Serializable {
 
-    private final long RES_ID;
+    private final UUID RES_ID;
     private Lodge lodge;
     private Date date;
     private LodgeGuest guest;
     private Room room;
 
     public Reservation() {
-        this.RES_ID = NEXT_RES_ID.getAndIncrement();
+        RES_ID = UUID.randomUUID();
     }
 
-    public Reservation(Date d, LodgeGuest g, Lodge l, Room r) {
-        this.RES_ID = NEXT_RES_ID.getAndIncrement();
-        this.date = d;
-        this.guest = g;
-        this.lodge = l;
-        this.room = r;
+    public Reservation(Date date, LodgeGuest guest, Lodge lodge, Room room) {
+        this.RES_ID = UUID.randomUUID();
+        this.date = date;
+        this.guest = guest;
+        this.lodge = lodge;
+        this.room = room;
     }
 
     @Override
     public String toString() {
-        return "Reservation RES_ID: " + RES_ID +
-                " Date: " + date +
-                " Guest: " + guest +
-                " Room: " + room;
+        return "Reservation{Reservation ID=" + RES_ID +
+                ", Date=" + date +
+                ", Guest=" + guest +
+                ", Room=" + room + "}";
     }
 
-    public long getRES_ID() {
+    public UUID getID() {
         return this.RES_ID;
     }
 

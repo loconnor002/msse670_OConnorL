@@ -1,33 +1,27 @@
-
-
 package com.lodgereservation.model.domain;
 
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.HashSet;
 
 public class Lodge {
-    static final AtomicLong NEXT_RES_ID = new AtomicLong(1);           // citation: https://stackoverflow.com/questions/8938528/how-do-i-get-a-unique-id-per-object-in-java
-
     private String lodgeName;
     private String lodgeAddr;                                           //todo Address or ContactInfo object
     private ArrayList<Reservation> reservations;
     private ArrayList<Room> rooms;
-    private ArrayList<LodgeGuest> guests;                               /*todo HashSet wrapped in synchronized set https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#synchronizedSet-java.util.Set-
+    private HashSet<LodgeGuest> guests;                               /*todo HashSet wrapped in synchronized set https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#synchronizedSet-java.util.Set-
                                                                          * https://docs.oracle.com/javase/8/docs/api/java/util/HashSet.html*/
 
     public Lodge() {
-        lodgeName = "unnamed lodge";
-        lodgeAddr = "blank lodge address";
         reservations = new ArrayList<>();
         rooms = new ArrayList<>();
+        guests = new HashSet<>();
     }
 
-    public Lodge(String ln) {
-        lodgeName = ln;
-        lodgeAddr = "blank lodge address";
+    public Lodge(String lodgeName) {
+        this.lodgeName = lodgeName;
         reservations = new ArrayList<>();
         rooms = new ArrayList<>();
-        guests = new ArrayList<>();
+        guests = new HashSet<>();
     }
 
     public Lodge(String ln, String addr) {
@@ -35,12 +29,20 @@ public class Lodge {
         lodgeAddr = addr;
         reservations = new ArrayList<>();
         rooms = new ArrayList<>();
-        guests = new ArrayList<>();
+        guests = new HashSet<>();
     }
 
-    public void addGuest(String fn, String ln) {
-        LodgeGuest temp = new LodgeGuest(fn, ln, this);
+    public void addGuest(LodgeGuest guest) {
+        guests.add(guest);
+    }
+
+    public void addGuest(String fn, String ln, String addr) {
+        LodgeGuest temp = new LodgeGuest(fn, ln, addr);
         guests.add(temp);
+    }
+
+    public void updateRoomAvailability(Room room, boolean available) {
+        room.setAvailable(available);
     }
 
     public String toString() {
@@ -79,11 +81,11 @@ public class Lodge {
         this.rooms = rooms;
     }
 
-    public ArrayList<LodgeGuest> getGuests() {
+    public HashSet<LodgeGuest> getGuests() {
         return guests;
     }
 
-    public void setGuests(ArrayList<LodgeGuest> guests) {
+    public void setGuests(HashSet<LodgeGuest> guests) {
         this.guests = guests;
     }
 }
