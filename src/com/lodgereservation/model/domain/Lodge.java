@@ -1,27 +1,27 @@
 package com.lodgereservation.model.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Objects;
 
-public class Lodge {
+public class Lodge implements Serializable {
     private String lodgeName;
     private String lodgeAddr;                                           //todo Address or ContactInfo object
     private ArrayList<Reservation> reservations;
     private ArrayList<Room> rooms;
-    private HashSet<LodgeGuest> guests;                               /*todo HashSet wrapped in synchronized set https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#synchronizedSet-java.util.Set-
+    private ArrayList<LodgeGuest> guests;                               /*todo HashSet wrapped in synchronized set https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#synchronizedSet-java.util.Set-
                                                                          * https://docs.oracle.com/javase/8/docs/api/java/util/HashSet.html*/
-
     public Lodge() {
         reservations = new ArrayList<>();
         rooms = new ArrayList<>();
-        guests = new HashSet<>();
+        guests = new ArrayList<>();
     }
 
     public Lodge(String lodgeName) {
         this.lodgeName = lodgeName;
         reservations = new ArrayList<>();
         rooms = new ArrayList<>();
-        guests = new HashSet<>();
+        guests = new ArrayList<>();                                               //default capacity 15, load factor 0.75
     }
 
     public Lodge(String ln, String addr) {
@@ -29,24 +29,35 @@ public class Lodge {
         lodgeAddr = addr;
         reservations = new ArrayList<>();
         rooms = new ArrayList<>();
-        guests = new HashSet<>();
+        guests = new ArrayList<>();
     }
 
     public void addGuest(LodgeGuest guest) {
         guests.add(guest);
     }
 
-    public void addGuest(String fn, String ln, String addr) {
-        LodgeGuest temp = new LodgeGuest(fn, ln, addr);
-        guests.add(temp);
-    }
-
-    public void updateRoomAvailability(Room room, boolean available) {
-        room.setAvailable(available);
+    public void addReservation(Reservation res) {
+        reservations.add(res);
     }
 
     public String toString() {
-        return "Lodge: " + lodgeName + " Guests: " + guests;
+        return "Lodge{lodgeName=" + lodgeName +
+                ", lodgeAddr="+ lodgeAddr +
+                ", totalReservations=" + reservations.size() +
+                ", totalGuests=" + guests.size() +"}";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Lodge lodge = (Lodge) o;
+        return Objects.equals(lodgeName, lodge.lodgeName) && Objects.equals(lodgeAddr, lodge.lodgeAddr) && Objects.equals(reservations, lodge.reservations) && Objects.equals(rooms, lodge.rooms) && Objects.equals(guests, lodge.guests);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(lodgeName, lodgeAddr, reservations, rooms, guests);
     }
 
     public String getLodgeName() {
@@ -81,11 +92,11 @@ public class Lodge {
         this.rooms = rooms;
     }
 
-    public HashSet<LodgeGuest> getGuests() {
+    public ArrayList<LodgeGuest> getGuests() {
         return guests;
     }
 
-    public void setGuests(HashSet<LodgeGuest> guests) {
+    public void setGuests(ArrayList<LodgeGuest> guests) {
         this.guests = guests;
     }
 }

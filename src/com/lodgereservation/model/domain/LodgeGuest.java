@@ -1,22 +1,27 @@
 package com.lodgereservation.model.domain;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
-public class LodgeGuest extends Person {
+public class LodgeGuest extends Person implements Serializable {
 
-    private final UUID ID;
+    private final UUID GUEST_ID;
+
     public LodgeGuest()  {
-        ID = UUID.randomUUID();
+        super();
+        GUEST_ID = UUID.randomUUID();
     }
 
     public LodgeGuest(String firstName, String lastName, String address) {
         super(firstName, lastName, address);
-        this.ID = UUID.randomUUID();
+        this.GUEST_ID = UUID.randomUUID();
     }
 
     public boolean validate() {
-        if (ID != null && !firstName.isBlank() && !lastName.isBlank() && !address.isBlank()) {
+        if (GUEST_ID != null && !firstName.isBlank()
+                && !lastName.isBlank() && !address.isBlank()
+                && email.contains("@")) {
             return true;
         }
         return false;
@@ -24,7 +29,13 @@ public class LodgeGuest extends Person {
 
     @Override
     public String toString() {
-        return this.firstName + " " + this.lastName;
+        //todo, StringBuffer?
+        return "LodgeGuest{Guest ID=" + GUEST_ID +
+                ", FirstName=" + firstName +
+                ", LastName=" + lastName +
+                ", Address=" + address +
+                ", Phone=" + phone +
+                ", Email=" + email + "}";
     }
 
     /**
@@ -53,18 +64,10 @@ public class LodgeGuest extends Person {
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, lastName);
+        return Objects.hash(GUEST_ID);
     }
 
     public UUID getID() {
-        return ID;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String addr) {
-        address = addr;
+        return GUEST_ID;
     }
 }

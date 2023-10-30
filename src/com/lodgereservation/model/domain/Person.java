@@ -8,12 +8,20 @@ public abstract class Person {
     protected String phone;
     protected String address;   //todo Address or ContactInfo object
 
-    public Person() {}
+    public Person() {
+        firstName = "";
+        lastName = "";
+        phone = "";
+        email = "";
+        address = "";
+    }
 
     public Person(String firstName, String lastName, String address) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
+        phone = "";
+        email = "";
     }
 
     public Person(String firstName, String lastName, String phone, String email, String address) {
@@ -21,7 +29,7 @@ public abstract class Person {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.email = email;
+        this.phone = phone;
     }
 
     public String getAddress() {

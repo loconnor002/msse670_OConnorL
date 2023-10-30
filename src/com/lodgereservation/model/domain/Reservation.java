@@ -2,12 +2,12 @@ package com.lodgereservation.model.domain;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Reservation implements Serializable {
 
-    private final UUID RES_ID;
-    private Lodge lodge;
+    private final UUID RES_ID;                                          //todo static?
     private Date date;
     private LodgeGuest guest;
     private Room room;
@@ -16,11 +16,10 @@ public class Reservation implements Serializable {
         RES_ID = UUID.randomUUID();
     }
 
-    public Reservation(Date date, LodgeGuest guest, Lodge lodge, Room room) {
+    public Reservation(Date date, LodgeGuest guest, Room room) {
         this.RES_ID = UUID.randomUUID();
         this.date = date;
         this.guest = guest;
-        this.lodge = lodge;
         this.room = room;
     }
 
@@ -28,20 +27,25 @@ public class Reservation implements Serializable {
     public String toString() {
         return "Reservation{Reservation ID=" + RES_ID +
                 ", Date=" + date +
-                ", Guest=" + guest +
-                ", Room=" + room + "}";
+                ", Guest=" + guest.getFirstName() + " " + guest.getLastName() +
+                ", Room=" + room.getRoomNum() + "}";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Reservation that = (Reservation) o;
+        return Objects.equals(RES_ID, that.RES_ID) && Objects.equals(date, that.date) && Objects.equals(guest, that.guest) && Objects.equals(room, that.room);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(RES_ID, date, guest, room);
     }
 
     public UUID getID() {
         return this.RES_ID;
-    }
-
-    public Lodge getLodge() {
-        return lodge;
-    }
-
-    public void setLodge(Lodge lodge) {
-        this.lodge = lodge;
     }
 
     public Date getDate() {

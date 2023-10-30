@@ -1,39 +1,46 @@
 package com.lodgereservation.model.domain;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.HashMap;
 
-public class ReservationComposite {
+public class ReservationComposite implements Serializable {
 
-    private Lodge lodge;
     private LodgeGuest guest;
     private Reservation reservation;
     private Room room;
-    private ArrayList<LocalDateTime> updates;
+    private HashMap<LocalDateTime, String> updates;
 
-    public ReservationComposite()  {
-        lodge = new Lodge();
+    public ReservationComposite() {
         guest = new LodgeGuest();
         reservation = new Reservation();
         room = new Room();
-        updates = new ArrayList<>();
+        updates = new HashMap<>();
     }
 
-    public ReservationComposite(Lodge lodge, LodgeGuest guest, Reservation res, Room room) {
-        this.lodge = lodge;
+    public ReservationComposite(LodgeGuest guest, Reservation res, Room room) {
         this.guest = guest;
         this.reservation = res;
         this.room = room;
-        updates = new ArrayList<LocalDateTime>();
+        updates = new HashMap<>();
     }
 
-    public void addUpdate(LocalDateTime dt) {
-        //todo store nature of update
-        updates.add(dt);
+    /**
+     * Log updates to this ReservationComposite object.
+     *
+     * @param dt        date and time of update
+     * @param comment   description of update
+     */
+    public void addUpdate(LocalDateTime dt, String comment) {
+        updates.put(dt, comment);
     }
 
     @Override
     public String toString() {
-        return updates.toString();
+        return "\nReservationComposite Info: " +
+                "\n" + guest +
+                "\n" + reservation +
+                "\n" + room +
+                "\nupdates: " + updates;
     }
 }

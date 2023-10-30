@@ -9,30 +9,35 @@ import java.time.LocalDateTime;
 public class Driver {
     public static void main(String[] args) {
         Lodge lodge;
-        Reservation res;
+        LodgeGuest guest;
         Room room;
+        Reservation res;
+        ReservationComposite composite;
 
-        System.out.println("\nLodge Guest Information");
+        // instantiate, initialize, and display a Lodge object
+        lodge = new Lodge("Alyeska", "Girdwood");
+        System.out.println("\n" + lodge);
 
-        lodge = new Lodge("Alyeska", "Girdwood, Alaska");
-        LodgeGuest arthurDent = new LodgeGuest("Arthur", "Dent", "Cottington, England");
-
-        lodge.addGuest(arthurDent);
-        System.out.println(arthurDent);
-
-        System.out.println("\nReservation Information");
+        // instantiate Guest, Room, and Reservation objects and initialize their values
+        guest = new LodgeGuest("Arthur", "Dent", "Cottington");
         res = new Reservation();
         room = new Room(42, true);
-        res.setLodge(lodge);
-        res.setDate(Date.valueOf(LocalDate.now()));
-        res.setGuest(arthurDent);
+
+        // add room and guest to the Reservation object, and set the reservation date
+        res.setGuest(guest);
         res.setRoom(room);
-        System.out.println(res.getLodge().getLodgeName());
+        res.setDate(Date.valueOf(LocalDate.now()));
+
+        // display reservation
         System.out.println(res);
 
-        ReservationComposite composite = new ReservationComposite();
-        composite.addUpdate(LocalDateTime.now());
-        composite.addUpdate(LocalDateTime.now());
-        System.out.println("updates: " + composite);
+        // store reservation and guest with the lodge
+        lodge.addReservation(res);
+        lodge.addGuest(guest);
+
+        // instantiate, initialize, and display ReservationComposite object
+        composite = new ReservationComposite(guest, res, room);
+        composite.addUpdate(LocalDateTime.now(), "test update");
+        System.out.println(composite);
     }
 }
