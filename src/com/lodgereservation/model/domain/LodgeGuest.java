@@ -18,6 +18,12 @@ public class LodgeGuest extends Person implements Serializable {
         this.GUEST_ID = UUID.randomUUID();
     }
 
+    /**
+     * Validate parameter values, check if guest ID is not null,
+     * email contains an '@' character, and names are not blank.
+     *
+     * @return true if parameters contain appropriate values, false otherwise
+     */
     public boolean validate() {
         if (GUEST_ID != null && !firstName.isBlank()
                 && !lastName.isBlank() && !address.isBlank()
