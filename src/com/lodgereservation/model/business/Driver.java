@@ -2,6 +2,7 @@ package com.lodgereservation.model.business;
 
 import com.lodgereservation.model.domain.*;
 import com.lodgereservation.model.services.factory.ServiceFactory;
+import com.lodgereservation.model.services.reservationService.ReservationServiceImplementation;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -12,10 +13,11 @@ public class Driver {
         Lodge lodge;
         LodgeGuest guest;
         Room room;
-        Reservation res;
+        Reservation res, res2;
         ReservationComposite composite;
         ServiceFactory serviceFactory;
         String result;      //todo remove
+        boolean success;    //todo remove
 
         // instantiate, initialize, and display a Lodge object
         lodge = new Lodge("Alyeska", "Girdwood");
@@ -50,5 +52,16 @@ public class Driver {
             System.out.println("authenticated " + guest.getFirstName());
         else
             System.out.println("not authenticated " + guest.getFirstName());
+
+        ReservationServiceImplementation resService = new ReservationServiceImplementation();
+        res2 = resService.createReservation();
+        resService.listReservations(lodge);
+        guest = new LodgeGuest("Tricia", "McMillan", "Islington");
+        res2.setGuest(guest);
+        res2.setRoom(room);
+        success = resService.updateReservation(lodge, res2);
+        System.out.println("update success: " + success);
+        success = resService.deleteReservation(guest.getID());
+        System.out.println("delete success: " + success);
     }
 }
