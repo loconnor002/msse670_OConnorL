@@ -20,7 +20,8 @@ public class ReservationServiceImplementation implements IReservationService {
     }
 
     @Override
-    public boolean updateReservation(Lodge lodge, Reservation res) {
+    public boolean
+    updateReservation(Lodge lodge, Reservation res) {
 
         System.out.println("ResServiceImpl.updateRes(Res) stub");
 

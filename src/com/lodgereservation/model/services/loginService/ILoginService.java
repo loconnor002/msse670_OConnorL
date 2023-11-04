@@ -4,11 +4,12 @@
  */
 package com.lodgereservation.model.services.loginService;
 
-import com.lodgereservation.model.domain.LodgeGuest;
+
+import com.lodgereservation.model.domain.ReservationComposite;
 
 public interface ILoginService {
 
-    String findUser();
-    boolean authenticateLodgeGuest(LodgeGuest guest);
+    boolean authenticateUser(ReservationComposite composite, String password);
+    boolean findUser(ReservationComposite composite);
 
 }

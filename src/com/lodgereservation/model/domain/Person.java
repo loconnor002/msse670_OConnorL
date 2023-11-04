@@ -1,12 +1,13 @@
 package com.lodgereservation.model.domain;
 
-public abstract class Person {
+public class Person {
 
     protected String email;
     protected String firstName;
     protected String lastName;
     protected String phone;
     protected String address;   //todo Address or ContactInfo object
+    protected String password;
 
     public Person() {
         firstName = "";
@@ -14,22 +15,25 @@ public abstract class Person {
         phone = "";
         email = "";
         address = "";
+        password = "";
     }
 
     public Person(String firstName, String lastName, String address) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
+        this.password = "default password";
         phone = "";
         email = "";
     }
 
-    public Person(String firstName, String lastName, String phone, String email, String address) {
+    public Person(String firstName, String lastName, String phone, String email, String address, String password) {
         this.address = address;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
+        this.password = password;
     }
 
     public String getAddress() {
@@ -71,4 +75,7 @@ public abstract class Person {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
+    public String getPassword() { return this.password; }
+    public void setPassword(String pswd) {this.password = pswd;}
 }

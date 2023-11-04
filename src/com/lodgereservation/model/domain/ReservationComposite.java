@@ -43,4 +43,8 @@ public class ReservationComposite implements Serializable {
                 "\n" + room +
                 "\nupdates: " + updates;
     }
+
+    public LodgeGuest getGuest() {
+        return this.guest;
+    }
 }

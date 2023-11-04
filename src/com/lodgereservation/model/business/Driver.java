@@ -16,8 +16,9 @@ public class Driver {
         Reservation res, res2;
         ReservationComposite composite;
         ServiceFactory serviceFactory;
-        String result;      //todo remove
-        boolean success;    //todo remove
+        String password = "default password";   //todo remove
+        boolean result;                         //todo remove
+        boolean success;                        //todo remove
 
         // instantiate, initialize, and display a Lodge object
         lodge = new Lodge("Alyeska", "Girdwood");
@@ -45,14 +46,15 @@ public class Driver {
         composite.addUpdate(LocalDateTime.now(), "test update");
         //System.out.println(composite);
 
+        // create new service factory
         serviceFactory = new ServiceFactory();
-        result = serviceFactory.getLoginService().findUser();
+        result = serviceFactory.getLoginService().findUser(composite);
         System.out.println("serviceFactory result: " + result);
-        if (serviceFactory.getLoginService().authenticateLodgeGuest(guest))
+        if (serviceFactory.getLoginService().authenticateUser(composite, password))
             System.out.println("authenticated " + guest.getFirstName());
         else
             System.out.println("not authenticated " + guest.getFirstName());
-
+/*
         ReservationServiceImplementation resService = new ReservationServiceImplementation();
         res2 = resService.createReservation();
         resService.listReservations(lodge);
@@ -62,6 +64,6 @@ public class Driver {
         success = resService.updateReservation(lodge, res2);
         System.out.println("update success: " + success);
         success = resService.deleteReservation(guest.getID());
-        System.out.println("delete success: " + success);
+        System.out.println("delete success: " + success);*/
     }
 }
