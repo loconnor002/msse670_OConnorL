@@ -15,7 +15,7 @@ public class Person {
         phone = "";
         email = "";
         address = "";
-        password = "";
+        password = "default password";
     }
 
     public Person(String firstName, String lastName, String address) {
