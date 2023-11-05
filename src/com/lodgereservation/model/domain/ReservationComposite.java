@@ -6,12 +6,14 @@ import java.util.HashMap;
 
 public class ReservationComposite implements Serializable {
 
+    private Lodge lodge;
     private LodgeGuest guest;
     private Reservation reservation;
     private Room room;
     private HashMap<LocalDateTime, String> updates;
 
     public ReservationComposite() {
+        lodge = new Lodge();
         guest = new LodgeGuest();
         reservation = new Reservation();
         room = new Room();
@@ -74,5 +76,13 @@ public class ReservationComposite implements Serializable {
 
     public void setUpdates(HashMap<LocalDateTime, String> updates) {
         this.updates = updates;
+    }
+
+    public Lodge getLodge() {
+        return lodge;
+    }
+
+    public void setLodge(Lodge lodge) {
+        this.lodge = lodge;
     }
 }

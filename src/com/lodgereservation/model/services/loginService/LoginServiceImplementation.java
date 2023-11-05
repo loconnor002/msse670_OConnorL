@@ -1,3 +1,6 @@
+/**
+ * @author Lauren.OConnor
+ */
 package com.lodgereservation.model.services.loginService;
 
 import com.lodgereservation.model.domain.ReservationComposite;

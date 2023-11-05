@@ -2,16 +2,13 @@ package com.lodgereservation.model.services.reservationService;
 
 import com.lodgereservation.model.domain.Reservation;
 import com.lodgereservation.model.domain.Lodge;
-
-import java.util.UUID;
+import com.lodgereservation.model.domain.Room;
 
 public class ReservationServiceImplementation implements IReservationService {
 
     @Override
     public Reservation createReservation() {
-        System.out.println("ResServiceImpl.createReservation() stub");
-        Reservation tempRes = new Reservation();
-        return tempRes;
+        return new Reservation();
     }
 
     @Override
@@ -21,21 +18,23 @@ public class ReservationServiceImplementation implements IReservationService {
 
     @Override
     public boolean
-    updateReservation(Lodge lodge, Reservation res) {
-
-        System.out.println("ResServiceImpl.updateRes(Res) stub");
+    updateReservationRoom(Lodge lodge, Reservation res, Room room) {
 
         if (res.getID() != null && lodge.getReservations().contains(res)) {
-            System.out.println("Reservation found: " + res);
+            res.setRoom(room);
             return true;
         }
-        System.out.println("Reservation not found: " + res);
+        System.out.println("Reservation not found, cannot update room for: " + res);
         return false;
     }
 
     @Override
-    public boolean deleteReservation(UUID resID) {
-        System.out.println("ResServiceImpl.deleteRes(ID) stub: " + resID);
+    public boolean deleteReservation(Lodge lodge, Reservation res) {
+        if (res.getID() != null && lodge.getReservations().contains(res)) {
+            lodge.getReservations().remove(res);
+            return true;
+        }
+        System.out.println("Reservation not found, cannot delete: " + res);
         return false;
     }
 }

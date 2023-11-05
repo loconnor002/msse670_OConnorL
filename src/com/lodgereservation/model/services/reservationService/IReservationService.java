@@ -3,15 +3,13 @@
  */
 package com.lodgereservation.model.services.reservationService;
 
-import com.lodgereservation.model.domain.Lodge;
-import com.lodgereservation.model.domain.Reservation;
-
-import java.util.UUID;
+import com.lodgereservation.model.domain.*;
 
 public interface IReservationService {
 
+    //todo convert all params to ReservationComposite?
     Reservation createReservation();
     void listReservations(Lodge lodge);
-    boolean updateReservation(Lodge lodge, Reservation res);    //todo pass composite?
-    boolean deleteReservation(UUID resID);
+    boolean updateReservationRoom(Lodge lodge, Reservation res, Room room);    //todo pass composite?
+    boolean deleteReservation(Lodge lodge, Reservation res);
 }

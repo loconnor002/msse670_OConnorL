@@ -12,7 +12,7 @@ public class Driver {
     public static void main(String[] args) {
         Lodge lodge;
         LodgeGuest guest;
-        Room room;
+        Room room, room2;
         Reservation res, res2;
         ReservationComposite composite;
         ServiceFactory serviceFactory;
@@ -48,22 +48,34 @@ public class Driver {
 
         // create new service factory
         serviceFactory = new ServiceFactory();
+
+
         result = serviceFactory.getLoginService().findUser(composite);
-        System.out.println("serviceFactory result: " + result);
+        System.out.println("serviceFactory findUser: " + result);
         if (serviceFactory.getLoginService().authenticateUser(composite, password))
             System.out.println("authenticated " + guest.getFirstName());
         else
             System.out.println("not authenticated " + guest.getFirstName());
 
-        ReservationServiceImplementation resService = new ReservationServiceImplementation();
-        res2 = resService.createReservation();
-        resService.listReservations(lodge);
+        //ReservationServiceImplementation resService = new ReservationServiceImplementation();
+        res2 = serviceFactory.getResService().createReservation();
+        serviceFactory.getResService().listReservations(lodge);
         guest = new LodgeGuest("Tricia", "McMillan", "Islington");
         res2.setGuest(guest);
+        lodge.addGuest(guest);
+
+        room2 = new Room(1, true);
         res2.setRoom(room);
-        success = resService.updateReservation(lodge, res2);
+        lodge.addReservation(res2);
+        System.out.println(lodge.getReservations());
+
+        success = serviceFactory.getResService().updateReservationRoom(lodge, res2, room2);
         System.out.println("update success: " + success);
-        success = resService.deleteReservation(guest.getID());
+        System.out.println(lodge.getReservations());
+
+        success = serviceFactory.getResService().deleteReservation(lodge, res);
         System.out.println("delete success: " + success);
+        System.out.println(lodge.getReservations());
+        System.out.println(lodge.getGuests());
     }
 }

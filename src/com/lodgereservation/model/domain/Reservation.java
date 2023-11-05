@@ -25,7 +25,7 @@ public class Reservation implements Serializable {
 
     @Override
     public String toString() {
-        return "Reservation{Reservation ID=" + RES_ID +
+        return "Reservation{ID=" + RES_ID +
                 ", Date=" + date +
                 ", Guest=" + guest.getFirstName() + " " + guest.getLastName() +
                 ", Room=" + room.getRoomNum() + "}";
