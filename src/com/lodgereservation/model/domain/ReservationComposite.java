@@ -47,4 +47,32 @@ public class ReservationComposite implements Serializable {
     public LodgeGuest getGuest() {
         return this.guest;
     }
+
+    public void setGuest(LodgeGuest guest) {
+        this.guest = guest;
+    }
+
+    public Reservation getReservation() {
+        return reservation;
+    }
+
+    public void setReservation(Reservation reservation) {
+        this.reservation = reservation;
+    }
+
+    public Room getRoom() {
+        return room;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
+    }
+
+    public HashMap<LocalDateTime, String> getUpdates() {
+        return updates;
+    }
+
+    public void setUpdates(HashMap<LocalDateTime, String> updates) {
+        this.updates = updates;
+    }
 }

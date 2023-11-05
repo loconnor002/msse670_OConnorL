@@ -54,7 +54,7 @@ public class Driver {
             System.out.println("authenticated " + guest.getFirstName());
         else
             System.out.println("not authenticated " + guest.getFirstName());
-/*
+
         ReservationServiceImplementation resService = new ReservationServiceImplementation();
         res2 = resService.createReservation();
         resService.listReservations(lodge);
@@ -64,6 +64,6 @@ public class Driver {
         success = resService.updateReservation(lodge, res2);
         System.out.println("update success: " + success);
         success = resService.deleteReservation(guest.getID());
-        System.out.println("delete success: " + success);*/
+        System.out.println("delete success: " + success);
     }
 }

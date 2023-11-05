@@ -13,7 +13,6 @@ public class LoginServiceImplementation implements ILoginService {
     @Override
     public boolean authenticateUser(ReservationComposite composite, String password) {
         //todo implement password check. Store password in database? salted & hashed?
-        password = "default password";
 
         if (findUser(composite) && password.equals(composite.getGuest().getPassword()))
             return true;
@@ -31,7 +30,7 @@ public class LoginServiceImplementation implements ILoginService {
     @Override
     public boolean findUser(ReservationComposite composite) {
         //todo SQL query
-        System.out.println("LoginServiceImplementation.findUser() stub");
+        //System.out.println("LoginServiceImplementation.findUser() stub");
 
         return true;
     }

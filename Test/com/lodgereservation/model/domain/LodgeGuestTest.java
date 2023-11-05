@@ -22,7 +22,7 @@ public class LodgeGuestTest extends TestCase {
         LodgeGuest lg = new LodgeGuest("Tricia", "McMillan", "Islington");
         lg.setEmail("not an email address");
 
-        assertFalse(lg.validate());
+        assert(!lg.validate());
         System.out.println("testValidateInvalidEmail PASSED");
     }
 
@@ -32,7 +32,7 @@ public class LodgeGuestTest extends TestCase {
     public void testNotValidate() {
         LodgeGuest lg = new LodgeGuest();
 
-        assertFalse(lg.validate());
+        assert(!lg.validate());
         System.out.println("testNotValidate PASSED");
     }
 
