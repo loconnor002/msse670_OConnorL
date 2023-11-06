@@ -8,12 +8,10 @@ import com.lodgereservation.model.services.reservationService.ReservationService
 public class ServiceFactory {
 
     public ILoginService getLoginService() {
-
         return new LoginServiceImplementation();
     }
 
     public IReservationService getResService() {
-
         return new ReservationServiceImplementation();
     }
 }

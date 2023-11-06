@@ -5,21 +5,39 @@ import com.lodgereservation.model.domain.Lodge;
 import com.lodgereservation.model.domain.Room;
 
 public class ReservationServiceImplementation implements IReservationService {
+    //todo change params to composite domain objects?
 
+    /**
+     * CREATE operation. Make a new blank reservation.
+     * @return new Reservation object
+     */
     @Override
     public Reservation createReservation() {
         return new Reservation();
     }
 
+
+    /**
+     * READ operation. Display a list of existing reservations for this lodge.
+     * @param lodge
+     */
     @Override
     public void listReservations(Lodge lodge) {
         System.out.println(lodge.getLodgeName() + lodge.getReservations());
     }
 
+
+    /**
+     * UPDATE uperation. Change the room on an existing reservation.
+     *
+     * @param lodge
+     * @param res
+     * @param room
+     * @return      true if operation successful, false otherwise
+     */
     @Override
     public boolean
     updateReservationRoom(Lodge lodge, Reservation res, Room room) {
-
         if (res.getID() != null && lodge.getReservations().contains(res)) {
             res.setRoom(room);
             return true;
@@ -28,6 +46,14 @@ public class ReservationServiceImplementation implements IReservationService {
         return false;
     }
 
+
+    /**
+     * DELETE operation. Remove a reservation.
+     *
+     * @param lodge
+     * @param res
+     * @return      true if operation successful, false otherwise
+     */
     @Override
     public boolean deleteReservation(Lodge lodge, Reservation res) {
         if (res.getID() != null && lodge.getReservations().contains(res)) {

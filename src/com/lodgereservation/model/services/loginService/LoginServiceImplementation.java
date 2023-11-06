@@ -1,6 +1,3 @@
-/**
- * @author Lauren.OConnor
- */
 package com.lodgereservation.model.services.loginService;
 
 import com.lodgereservation.model.domain.ReservationComposite;
@@ -26,7 +23,6 @@ public class LoginServiceImplementation implements ILoginService {
     /**
      * Locate a user in the (fake) database.
      *
-     * @see             'authenticateLodgeGuest(ReservationComposite)
      * @param composite a domain object
      * @return          true if the user was found in the system, false otherwise
      */
