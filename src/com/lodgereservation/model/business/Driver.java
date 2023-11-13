@@ -1,8 +1,11 @@
 package com.lodgereservation.model.business;
 
+import com.lodgereservation.model.business.exception.ServiceLoadException;
 import com.lodgereservation.model.domain.*;
 import com.lodgereservation.model.services.factory.ServiceFactory;
-import com.lodgereservation.model.services.reservationService.ReservationServiceImplementation;
+import com.lodgereservation.model.services.loginService.ILoginService;
+import com.lodgereservation.model.services.reservationService.IReservationService;
+import com.lodgereservation.model.services.reservationService.ReservationServiceImpl;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -16,6 +19,7 @@ public class Driver {
         Reservation res, res2;
         ReservationComposite composite;
         ServiceFactory serviceFactory;
+        ReservationServiceImpl resService;
         String password = "default password";   //todo remove wk4
         boolean result;                         //todo remove wk4
         boolean success;                        //todo remove wk4
@@ -46,12 +50,20 @@ public class Driver {
         composite.addUpdate(LocalDateTime.now(), "test update");
         //System.out.println(composite);
 
+        serviceFactory = ServiceFactory.getInstance();
+        try {
+            resService = (ReservationServiceImpl) serviceFactory.getService(IReservationService.NAME);
+            resService.listReservations(lodge);
+        }
+        catch (ServiceLoadException e) {
+            System.out.println(e);
+        }
         // create new service factory
-        serviceFactory = new ServiceFactory();
+        // todo remove serviceFactory = new ServiceFactory();
 
         //Demonstrate CRUD operations from services layer (will be replaced by presentation layer in the coming weeks)
         //LoginService
-        result = serviceFactory.getLoginService().findUser(composite);
+        /*todo remove result = serviceFactory.getLoginService().findUser(composite);
         System.out.println("serviceFactory findUser: " + result);
         if (serviceFactory.getLoginService().authenticateUser(composite, password))
             System.out.println("authenticated " + guest.getFirstName());
@@ -81,5 +93,7 @@ public class Driver {
         System.out.println("delete success: " + success);
         System.out.println(lodge.getReservations());
         System.out.println(lodge.getGuests());
+
+         */
     }
 }

@@ -27,6 +27,15 @@ public class Person {
         email = "";
     }
 
+    public Person(String firstName, String lastName, String address, String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.password = "default password";
+        phone = "";
+        this.email = email;
+    }
+
     public Person(String firstName, String lastName, String phone, String email, String address, String password) {
         this.address = address;
         this.email = email;

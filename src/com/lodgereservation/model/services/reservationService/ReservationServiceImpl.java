@@ -4,7 +4,7 @@ import com.lodgereservation.model.domain.Reservation;
 import com.lodgereservation.model.domain.Lodge;
 import com.lodgereservation.model.domain.Room;
 
-public class ReservationServiceImplementation implements IReservationService {
+public class ReservationServiceImpl implements IReservationService {
     //todo change params to composite domain objects?
 
     /**

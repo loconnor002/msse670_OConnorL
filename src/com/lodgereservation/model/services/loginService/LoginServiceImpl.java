@@ -2,7 +2,7 @@ package com.lodgereservation.model.services.loginService;
 
 import com.lodgereservation.model.domain.ReservationComposite;
 
-public class LoginServiceImplementation implements ILoginService {
+public class LoginServiceImpl implements ILoginService {
 
     /**
      * Verify a user's credentials and give them the appropriate level of access to the system.
