@@ -2,6 +2,7 @@ package com.lodgereservation.model.business;
 
 import com.lodgereservation.model.business.exception.ServiceLoadException;
 import com.lodgereservation.model.domain.*;
+import com.lodgereservation.model.services.exception.ReservationException;
 import com.lodgereservation.model.services.factory.ServiceFactory;
 import com.lodgereservation.model.services.loginService.ILoginService;
 import com.lodgereservation.model.services.reservationService.IReservationService;
@@ -51,13 +52,24 @@ public class Driver {
         //System.out.println(composite);
 
         serviceFactory = ServiceFactory.getInstance();
+        guest = new LodgeGuest("Ford", "Prefect", "ford.prefect@h2g2.com", "Somewhere in the vicinity of Betelgeuse");
+        composite = new ReservationComposite(guest, res, room);
+        composite.addUpdate(LocalDateTime.now(), "added reservation " + res.getID());
+
         try {
             resService = (ReservationServiceImpl) serviceFactory.getService(IReservationService.NAME);
+            res = resService.createReservation();
+            res.setGuest(guest);
+            res.setRoom(new Room(44));
+            lodge.addGuest(guest);
+            lodge.addReservation(res);
+
             resService.listReservations(lodge);
         }
-        catch (ServiceLoadException e) {
-            System.out.println(e);
+        catch (ServiceLoadException | ReservationException e) {
+            e.printStackTrace();
         }
+
         // create new service factory
         // todo remove serviceFactory = new ServiceFactory();
 

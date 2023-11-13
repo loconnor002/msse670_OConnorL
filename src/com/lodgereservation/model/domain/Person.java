@@ -1,6 +1,8 @@
 package com.lodgereservation.model.domain;
 
-public class Person {
+import java.io.Serializable;
+
+public class Person implements Serializable {
 
     protected String email;
     protected String firstName;

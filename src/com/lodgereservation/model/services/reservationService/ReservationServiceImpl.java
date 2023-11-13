@@ -3,6 +3,7 @@ package com.lodgereservation.model.services.reservationService;
 import com.lodgereservation.model.domain.Reservation;
 import com.lodgereservation.model.domain.Lodge;
 import com.lodgereservation.model.domain.Room;
+import com.lodgereservation.model.services.exception.ReservationException;
 
 public class ReservationServiceImpl implements IReservationService {
     //todo change params to composite domain objects?
@@ -12,7 +13,7 @@ public class ReservationServiceImpl implements IReservationService {
      * @return new Reservation object
      */
     @Override
-    public Reservation createReservation() {
+    public Reservation createReservation() throws ReservationException {
         return new Reservation();
     }
 
