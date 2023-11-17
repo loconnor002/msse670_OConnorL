@@ -1,6 +1,6 @@
 package com.lodgereservation.model.services.loginService;
 
-import com.lodgereservation.model.domain.ReservationComposite;
+import com.lodgereservation.model.domain.Composite;
 
 public class LoginServiceImpl implements ILoginService {
 
@@ -11,7 +11,7 @@ public class LoginServiceImpl implements ILoginService {
      * @return          true if person exists in the system, false otherwise
      */
     @Override
-    public boolean authenticateUser(ReservationComposite composite, String password) {
+    public boolean authenticateUser(Composite composite, String password) {
         //todo implement password check. Store password in database? salted & hashed?
 
         if (findUser(composite) && password.equals(composite.getGuest().getPassword()))
@@ -27,7 +27,7 @@ public class LoginServiceImpl implements ILoginService {
      * @return          true if the user was found in the system, false otherwise
      */
     @Override
-    public boolean findUser(ReservationComposite composite) {
+    public boolean findUser(Composite composite) {
         //todo SQL query
         //System.out.println("LoginServiceImplementation.findUser() stub");
 

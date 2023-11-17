@@ -2,7 +2,7 @@ package com.lodgereservation.model.services.loginService;
 
 import com.lodgereservation.model.business.exception.ServiceLoadException;
 import com.lodgereservation.model.domain.LodgeGuest;
-import com.lodgereservation.model.domain.ReservationComposite;
+import com.lodgereservation.model.domain.Composite;
 import com.lodgereservation.model.services.exception.LoginException;
 import com.lodgereservation.model.services.factory.ServiceFactory;
 import junit.framework.TestCase;
@@ -12,7 +12,7 @@ public class LoginServiceImplTest extends TestCase {
     private ServiceFactory serviceFactory;
     private LodgeGuest guest;
     private LoginServiceImpl loginService = new LoginServiceImpl();
-    private ReservationComposite composite = new ReservationComposite();
+    private Composite composite = new Composite();
 
 
     @Override
@@ -69,7 +69,7 @@ public class LoginServiceImplTest extends TestCase {
      * Test that a known valid user is found.
      */
     public void testFindUserInvalid() {
-        ReservationComposite c = new ReservationComposite();
+        Composite c = new Composite();
         System.out.println(loginService.findUser(c));
         assert(loginService.findUser(c));
         System.out.println("testFindUserInvalid PASSED");

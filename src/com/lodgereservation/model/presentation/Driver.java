@@ -1,10 +1,11 @@
-package com.lodgereservation.model.business;
+package com.lodgereservation.model.presentation;
 
 import com.lodgereservation.model.business.exception.*;
 import com.lodgereservation.model.domain.*;
 import com.lodgereservation.model.services.factory.*;
 import com.lodgereservation.model.services.inventory.*;
 import com.lodgereservation.model.services.loginService.*;
+import com.lodgereservation.model.services.manager.LodgeReservationManager;
 import com.lodgereservation.model.services.reservationService.*;
 import com.lodgereservation.model.services.exception.*;
 import java.sql.Date;
@@ -18,10 +19,12 @@ public class Driver {
         LodgeGuest guest;
         Room room, room2;
         Reservation res, res2;
+        String message;
         InventoryServiceImpl inventoryService;
         LoginServiceImpl loginService;
         ReservationServiceImpl resService;
-        ReservationComposite composite;
+        LodgeReservationManager manager;
+        Composite composite;
         ServiceFactory serviceFactory;
 
         String password = "default password";   //todo remove wk4
@@ -55,7 +58,7 @@ public class Driver {
         lodge.getRooms().add(room);
         lodge.getRooms().add(new Room(1, true));
         // instantiate, initialize, and display ReservationComposite object
-        composite = new ReservationComposite(guest, res, room, lodge);
+        composite = new Composite(guest, res, room, lodge);
         composite.addUpdate(LocalDateTime.now(), "test update");
         System.out.println(composite.getLodge().getRooms());
 
@@ -63,7 +66,7 @@ public class Driver {
 
         serviceFactory = ServiceFactory.getInstance();
         guest = new LodgeGuest("Ford", "Prefect", "ford.prefect@h2g2.com", "Somewhere in the vicinity of Betelgeuse");
-        composite = new ReservationComposite(guest, res, room, lodge);
+        composite = new Composite(guest, res, room, lodge);
         composite.addUpdate(LocalDateTime.now(), "added reservation " + res.getID());
 
 
@@ -71,7 +74,7 @@ public class Driver {
         // Demonstrate serviceFactory get reservation service
         try {
             resService = (ReservationServiceImpl) serviceFactory.getService(IReservationService.NAME);
-            res = resService.createReservation();
+            res = resService.createReservation(composite);
             res.setGuest(guest);
             res.setRoom(new Room(44));
             lodge.addGuest(guest);
@@ -146,5 +149,8 @@ public class Driver {
         System.out.println(lodge.getGuests());
 
          */
+        manager = LodgeReservationManager.getInstance();
+        success = manager.performAction("BOOK_RESERVATION", composite);
+        System.out.println("BookReservation success: " + success);
     }
 }

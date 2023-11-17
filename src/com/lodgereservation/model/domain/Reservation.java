@@ -23,6 +23,13 @@ public class Reservation implements Serializable {
         this.room = room;
     }
 
+    public Reservation(Composite composite) {
+        RES_ID = composite.getReservation().getID();
+        date = composite.getReservation().getDate();
+        guest = composite.getGuest();
+        room = composite.getRoom();
+    }
+
     @Override
     public String toString() {
         return "Reservation{ID=" + RES_ID +

@@ -1,7 +1,7 @@
 package com.lodgereservation.model.services.reservation;
 
 import com.lodgereservation.model.domain.Reservation;
-import com.lodgereservation.model.domain.ReservationComposite;
+import com.lodgereservation.model.domain.Composite;
 import com.lodgereservation.model.services.exception.ReservationException;
 import com.lodgereservation.model.services.factory.ServiceFactory;
 import com.lodgereservation.model.services.reservationService.IReservationService;
@@ -10,14 +10,14 @@ import junit.framework.TestCase;
 
 public class ReservationServiceImplTest extends TestCase {
 
-    private ReservationComposite composite;
+    private Composite composite;
     private ReservationServiceImpl reservationService;
     private ServiceFactory serviceFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        composite = new ReservationComposite();
+        composite = new Composite();
         serviceFactory = ServiceFactory.getInstance();
         reservationService = (ReservationServiceImpl) serviceFactory.getService(IReservationService.NAME);
     }

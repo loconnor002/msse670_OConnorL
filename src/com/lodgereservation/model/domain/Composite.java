@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 
-public class ReservationComposite implements Serializable {
+public class Composite implements Serializable {
 
     private Lodge lodge;
     private LodgeGuest guest;
@@ -12,7 +12,7 @@ public class ReservationComposite implements Serializable {
     private Room room;
     private HashMap<LocalDateTime, String> updates;
 
-    public ReservationComposite() {
+    public Composite() {
         lodge = new Lodge();
         guest = new LodgeGuest();
         reservation = new Reservation();
@@ -20,7 +20,7 @@ public class ReservationComposite implements Serializable {
         updates = new HashMap<>();
     }
 
-    public ReservationComposite(LodgeGuest guest, Reservation res, Room room, Lodge lodge) {
+    public Composite(LodgeGuest guest, Reservation res, Room room, Lodge lodge) {
         this.lodge = lodge;
         this.guest = guest;
         this.reservation = res;

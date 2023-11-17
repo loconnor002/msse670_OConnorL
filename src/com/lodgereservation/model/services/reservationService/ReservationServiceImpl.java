@@ -1,5 +1,6 @@
 package com.lodgereservation.model.services.reservationService;
 
+import com.lodgereservation.model.domain.Composite;
 import com.lodgereservation.model.domain.Reservation;
 import com.lodgereservation.model.domain.Lodge;
 import com.lodgereservation.model.domain.Room;
@@ -8,13 +9,22 @@ import com.lodgereservation.model.services.exception.ReservationException;
 public class ReservationServiceImpl implements IReservationService {
     //todo change params to composite domain objects?
 
+
+    @Override
+    public boolean bookReservation(Composite composite) {
+        //todo implement
+        System.out.println("ResServiceImpl.bookReservation() stub");
+        return false;
+    }
+
+
     /**
      * CREATE operation. Make a new blank reservation.
      * @return new Reservation object
      */
     @Override
-    public Reservation createReservation() throws ReservationException {
-        return new Reservation();
+    public Reservation createReservation(Composite composite) throws ReservationException {
+        return new Reservation(composite);
     }
 
 

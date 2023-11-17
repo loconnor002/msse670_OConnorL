@@ -1,7 +1,7 @@
 package com.lodgereservation.model.services.inventory;
 
 import com.lodgereservation.model.domain.Room;
-import com.lodgereservation.model.domain.ReservationComposite;
+import com.lodgereservation.model.domain.Composite;
 import com.lodgereservation.model.services.exception.InventoryException;
 
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class InventoryServiceImpl implements IInventoryService {
 
     @Override
-    public boolean addRoomToLodge(ReservationComposite composite, Room room) throws InventoryException {
+    public boolean addRoomToLodge(Composite composite, Room room) throws InventoryException {
 
         if (room == null || composite.getLodge().getRooms().contains(room)) {
             return false;
@@ -29,7 +29,7 @@ public class InventoryServiceImpl implements IInventoryService {
     }
 
     @Override
-    public void displayAvailableRooms(ReservationComposite composite) {
+    public void displayAvailableRooms(Composite composite) {
         ArrayList<Room> rooms;
         rooms = composite.getLodge().getRooms();
         for (Room room : rooms) {
