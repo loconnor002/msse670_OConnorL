@@ -40,8 +40,9 @@ public class ServiceFactory {
     private String getImplName(String serviceName) throws Exception {
 
         java.util.Properties props = new java.util.Properties();
-        //String propertyFileLocation = System.getProperty("prop_location"); //todo System.getProperty
-        String propertyFileLocation = "C:\\Users\\lo\\IdeaProjects\\LodgeReservation\\config\\application.properties";
+        String propertyFileLocation = System.getProperty("prop_location"); //todo System.getProperty
+        //String propertyFileLocation = "C:\\Users\\lo\\IdeaProjects\\LodgeReservation\\config\\application.properties";
+        //System.out.println("Property passed with -D:" + System.getProperty("prop_location"));
 
         java.io.FileInputStream fis = new java.io.FileInputStream(propertyFileLocation);
 

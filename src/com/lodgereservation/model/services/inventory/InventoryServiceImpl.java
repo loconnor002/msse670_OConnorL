@@ -4,6 +4,8 @@ import com.lodgereservation.model.domain.Room;
 import com.lodgereservation.model.domain.ReservationComposite;
 import com.lodgereservation.model.services.exception.InventoryException;
 
+import java.util.ArrayList;
+
 public class InventoryServiceImpl implements IInventoryService {
 
     @Override
@@ -28,7 +30,16 @@ public class InventoryServiceImpl implements IInventoryService {
 
     @Override
     public void displayAvailableRooms(ReservationComposite composite) {
-        System.out.println(composite.getLodge().getRooms());
+        ArrayList<Room> rooms;
+        rooms = composite.getLodge().getRooms();
+        for (Room room : rooms) {
+            if (room.getAvailable()) {
+                System.out.println(room);
+            }
+            else {
+                System.out.println("not available");
+            }
+        }
     }
 
     @Override

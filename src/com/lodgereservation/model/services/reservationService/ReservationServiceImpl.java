@@ -41,6 +41,7 @@ public class ReservationServiceImpl implements IReservationService {
     updateReservationRoom(Lodge lodge, Reservation res, Room room) {
         if (res.getID() != null && lodge.getReservations().contains(res)) {
             res.setRoom(room);
+            room.setAvailable(false);
             return true;
         }
         System.out.println("Reservation not found, cannot update room for: " + res);

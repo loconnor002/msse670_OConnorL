@@ -20,7 +20,8 @@ public class ReservationComposite implements Serializable {
         updates = new HashMap<>();
     }
 
-    public ReservationComposite(LodgeGuest guest, Reservation res, Room room) {
+    public ReservationComposite(LodgeGuest guest, Reservation res, Room room, Lodge lodge) {
+        this.lodge = lodge;
         this.guest = guest;
         this.reservation = res;
         this.room = room;

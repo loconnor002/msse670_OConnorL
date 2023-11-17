@@ -1,29 +1,35 @@
 package com.lodgereservation.model.business;
 
-import com.lodgereservation.model.business.exception.ServiceLoadException;
+import com.lodgereservation.model.business.exception.*;
 import com.lodgereservation.model.domain.*;
-import com.lodgereservation.model.services.exception.ReservationException;
-import com.lodgereservation.model.services.factory.ServiceFactory;
-import com.lodgereservation.model.services.loginService.ILoginService;
-import com.lodgereservation.model.services.reservationService.IReservationService;
-import com.lodgereservation.model.services.reservationService.ReservationServiceImpl;
-
+import com.lodgereservation.model.services.factory.*;
+import com.lodgereservation.model.services.inventory.*;
+import com.lodgereservation.model.services.loginService.*;
+import com.lodgereservation.model.services.reservationService.*;
+import com.lodgereservation.model.services.exception.*;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Driver {
     public static void main(String[] args) {
+        boolean authenticated;
         Lodge lodge;
         LodgeGuest guest;
         Room room, room2;
         Reservation res, res2;
+        InventoryServiceImpl inventoryService;
+        LoginServiceImpl loginService;
+        ReservationServiceImpl resService;
         ReservationComposite composite;
         ServiceFactory serviceFactory;
-        ReservationServiceImpl resService;
+
         String password = "default password";   //todo remove wk4
         boolean result;                         //todo remove wk4
         boolean success;                        //todo remove wk4
+
+        // todo Driver cleanup - wk5 instantiate & configure Composite obj, pass it to services, print returned output from methods
+
 
         // instantiate, initialize, and display a Lodge object
         lodge = new Lodge("Alyeska", "Girdwood");
@@ -37,6 +43,7 @@ public class Driver {
         // add room and guest to the Reservation object, and set the reservation date
         res.setGuest(guest);
         res.setRoom(room);
+        room.setAvailable(false);
         res.setDate(Date.valueOf(LocalDate.now()));
 
         // display reservation
@@ -45,17 +52,23 @@ public class Driver {
         // store reservation and guest with the lodge
         lodge.addReservation(res);
         lodge.addGuest(guest);
-
+        lodge.getRooms().add(room);
+        lodge.getRooms().add(new Room(1, true));
         // instantiate, initialize, and display ReservationComposite object
-        composite = new ReservationComposite(guest, res, room);
+        composite = new ReservationComposite(guest, res, room, lodge);
         composite.addUpdate(LocalDateTime.now(), "test update");
+        System.out.println(composite.getLodge().getRooms());
+
         //System.out.println(composite);
 
         serviceFactory = ServiceFactory.getInstance();
         guest = new LodgeGuest("Ford", "Prefect", "ford.prefect@h2g2.com", "Somewhere in the vicinity of Betelgeuse");
-        composite = new ReservationComposite(guest, res, room);
+        composite = new ReservationComposite(guest, res, room, lodge);
         composite.addUpdate(LocalDateTime.now(), "added reservation " + res.getID());
 
+
+
+        // Demonstrate serviceFactory get reservation service
         try {
             resService = (ReservationServiceImpl) serviceFactory.getService(IReservationService.NAME);
             res = resService.createReservation();
@@ -63,10 +76,36 @@ public class Driver {
             res.setRoom(new Room(44));
             lodge.addGuest(guest);
             lodge.addReservation(res);
-
             resService.listReservations(lodge);
+
+        } catch (ServiceLoadException | ReservationException e) {
+            e.printStackTrace();
         }
-        catch (ServiceLoadException | ReservationException e) {
+
+
+        /*
+        // Demonstrate serviceFactory get login service
+        try {
+            loginService = (LoginServiceImpl) serviceFactory.getService(ILoginService.NAME);
+            authenticated = loginService.authenticateUser(composite, composite.getGuest().getPassword());
+            if (authenticated) {
+                System.out.print("authenticated: ");
+            }
+            System.out.println(composite.getGuest() + " pswd: " + composite.getGuest().getPassword());
+
+        } catch (ServiceLoadException e) {
+            e.printStackTrace();
+        }*/
+
+        // Demonstrate service factory get inventory service
+        try {
+            inventoryService = (InventoryServiceImpl) serviceFactory.getService(IInventoryService.NAME);
+            inventoryService.displayAvailableRooms(composite);
+            inventoryService.addRoomToLodge(composite, new Room(45, true, true));
+
+            inventoryService.displayAvailableRooms(composite);
+
+        } catch (ServiceLoadException | InventoryException e) {
             e.printStackTrace();
         }
 
