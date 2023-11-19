@@ -12,6 +12,6 @@ public interface IInventoryService extends IService {
 
     boolean addRoomToLodge(Composite composite, Room room) throws InventoryException;
     boolean makeRoomAvailable(Room room) throws InventoryException;
-    void displayAvailableRooms(Composite composite) throws InventoryException;
+    boolean displayAvailableRooms(Composite composite) throws InventoryException;
     boolean deleteRoom() throws InventoryException;
 }

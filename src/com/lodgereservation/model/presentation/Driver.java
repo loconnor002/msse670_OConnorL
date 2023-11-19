@@ -87,8 +87,14 @@ public class Driver {
 
         try {
             manager = LodgeReservationManager.getInstance();
-            success = manager.performAction("ReserveRoom", composite);
+            success = manager.performAction("RESERVE_ROOM", composite);
             System.out.println("ReserveRoom success: " + success);
+
+            success = manager.performAction("LOGIN_LODGE_GUEST", composite);
+            System.out.println("LoginGuest success: " + success);
+
+            success = manager.performAction("CHECK_INVENTORY", composite);
+            System.out.println("CheckInventory success: " + success);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -29,7 +29,7 @@ public class InventoryServiceImpl implements IInventoryService {
     }
 
     @Override
-    public void displayAvailableRooms(Composite composite) {
+    public boolean displayAvailableRooms(Composite composite) {
         ArrayList<Room> rooms;
         rooms = composite.getLodge().getRooms();
         for (Room room : rooms) {
@@ -40,6 +40,7 @@ public class InventoryServiceImpl implements IInventoryService {
                 System.out.println("not available");
             }
         }
+        return true;
     }
 
     @Override
