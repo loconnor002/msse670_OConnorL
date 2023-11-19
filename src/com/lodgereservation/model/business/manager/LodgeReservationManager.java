@@ -1,7 +1,6 @@
-package com.lodgereservation.model.services.manager;
+package com.lodgereservation.model.business.manager;
 
 import com.lodgereservation.model.business.exception.ServiceLoadException;
-import com.lodgereservation.model.business.manager.ManagerSuperType;
 import com.lodgereservation.model.domain.Composite;
 import com.lodgereservation.model.services.exception.ReservationException;
 import com.lodgereservation.model.services.factory.ServiceFactory;
@@ -52,7 +51,6 @@ public class LodgeReservationManager extends ManagerSuperType {
 
 
     // todo, changed to private (notes p. 35) - find caller in sample code
-
     //@see                 "LodgeReservationManager.performAction(String, Composite)"
     private boolean bookReservation(String commandString, Composite composite) {
         boolean isBooked = false;

@@ -1,11 +1,11 @@
 package com.lodgereservation.model.presentation;
 
 import com.lodgereservation.model.business.exception.*;
+import com.lodgereservation.model.business.manager.LodgeReservationManager;
 import com.lodgereservation.model.domain.*;
 import com.lodgereservation.model.services.factory.*;
 import com.lodgereservation.model.services.inventory.*;
 import com.lodgereservation.model.services.loginService.*;
-import com.lodgereservation.model.services.manager.LodgeReservationManager;
 import com.lodgereservation.model.services.reservationService.*;
 import com.lodgereservation.model.services.exception.*;
 import java.sql.Date;
@@ -85,6 +85,13 @@ public class Driver {
             e.printStackTrace();
         }
 
+        try {
+            manager = LodgeReservationManager.getInstance();
+            success = manager.performAction("ReserveRoom", composite);
+            System.out.println("ReserveRoom success: " + success);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         /*
         // Demonstrate serviceFactory get login service

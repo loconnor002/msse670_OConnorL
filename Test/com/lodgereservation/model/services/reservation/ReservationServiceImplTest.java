@@ -29,7 +29,7 @@ public class ReservationServiceImplTest extends TestCase {
         boolean authenticated;
         Reservation res;
         try {
-            res = reservationService.createReservation();
+            res = reservationService.createReservation(composite);
             authenticated = res instanceof Reservation;
 
             assert(authenticated);
