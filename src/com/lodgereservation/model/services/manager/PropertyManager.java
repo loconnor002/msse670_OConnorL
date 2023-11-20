@@ -11,10 +11,10 @@ public class PropertyManager {
     private static Properties properties;
 
     /**
-     * Load the properties file to make its contents available for classes in the model layer.
+     * Load the properties file to make its contents available for classes anywhere in the model.
      *
      * @param propertyFileLocation              the location path name of the properties file
-     * @throws PropertyFileNotFoundException    //todo explain
+     * @throws PropertyFileNotFoundException    if
      */
     public static void loadProperties(String propertyFileLocation) throws PropertyFileNotFoundException {
         properties = new Properties();

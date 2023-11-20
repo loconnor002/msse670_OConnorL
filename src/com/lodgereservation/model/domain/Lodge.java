@@ -21,7 +21,7 @@ public class Lodge implements Serializable {
         this.lodgeName = lodgeName;
         reservations = new ArrayList<>();
         rooms = new ArrayList<>();
-        guests = new ArrayList<>();                                               //default capacity 15, load factor 0.75
+        guests = new ArrayList<>();                                              //default capacity 15, load factor 0.75
     }
 
     public Lodge(String ln, String addr) {

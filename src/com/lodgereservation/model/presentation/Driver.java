@@ -31,7 +31,28 @@ public class Driver {
         boolean result;                         //todo remove wk4
         boolean success;                        //todo remove wk4
 
-        // todo Driver cleanup - wk5 instantiate & configure Composite obj, pass it to services, print returned output from methods
+        //wk5 instantiate & configure Composite obj, pass it to services, print returned output from methods
+        guest = new LodgeGuest("Arthur", "Dent", "Cottington");
+        lodge = new Lodge("Alyeska", "Girdwood");
+        lodge.addGuest(guest);
+
+        composite = new Composite(guest, lodge);
+        composite.addUpdate(LocalDateTime.now(), "composite created");
+        serviceFactory = ServiceFactory.getInstance();
+
+        try {
+            resService = (ReservationServiceImpl) serviceFactory.getService(IReservationService.NAME);
+            res = resService.createReservation(composite);
+            success = resService.performAction("RESERVE_ROOM", composite);  //todo call resService or resMgr??
+            res.setGuest(guest);
+            res.setRoom(new Room(44));
+            lodge.addReservation(res);
+            resService.listReservations(lodge);
+
+        } catch (ServiceLoadException | ReservationException e) {
+            e.printStackTrace();
+        }
+
 
 
         // instantiate, initialize, and display a Lodge object
@@ -59,7 +80,7 @@ public class Driver {
         lodge.getRooms().add(new Room(1, true));
         // instantiate, initialize, and display ReservationComposite object
         composite = new Composite(guest, res, room, lodge);
-        composite.addUpdate(LocalDateTime.now(), "test update");
+        composite.addUpdate(LocalDateTime.now(), "composite created");
         System.out.println(composite.getLodge().getRooms());
 
         //System.out.println(composite);
@@ -68,8 +89,6 @@ public class Driver {
         guest = new LodgeGuest("Ford", "Prefect", "ford.prefect@h2g2.com", "Somewhere in the vicinity of Betelgeuse");
         composite = new Composite(guest, res, room, lodge);
         composite.addUpdate(LocalDateTime.now(), "added reservation " + res.getID());
-
-
 
         // Demonstrate serviceFactory get reservation service
         try {

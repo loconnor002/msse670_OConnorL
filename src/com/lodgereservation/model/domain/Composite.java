@@ -28,6 +28,14 @@ public class Composite implements Serializable {
         updates = new HashMap<>();
     }
 
+    public Composite(LodgeGuest guest, Lodge lodge) {
+        this.lodge = lodge;
+        this.guest = guest;
+        this.reservation = new Reservation();
+        this.room = new Room();
+        updates = new HashMap<>();
+    }
+
     /**
      * Log updates to this ReservationComposite object.
      *
