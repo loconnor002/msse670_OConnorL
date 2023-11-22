@@ -76,6 +76,8 @@ public class LodgeReservationManager extends ManagerSuperType {
             isUpdated = reservationService.updateReservationRoom(composite.getLodge(), composite.getReservation(), composite.getNewRoom());
         } catch(ServiceLoadException sle) {
             System.err.println("ServiceLoadException from LodgeReservationManager: " + sle.getMessage());
+        } catch (ReservationException re) {
+            System.out.println(re.getMessage());
         }
         return isUpdated;
     }
@@ -102,6 +104,8 @@ public class LodgeReservationManager extends ManagerSuperType {
 
         } catch (ServiceLoadException sle) {
             System.err.println("ServiceLoadException from LodgeReservationManager: " + sle.getMessage());
+        } catch (ReservationException re) {
+            System.err.println("ReservationException from LodgeReservationManager: " + re.getMessage());
         }
         return isBooked;
     }

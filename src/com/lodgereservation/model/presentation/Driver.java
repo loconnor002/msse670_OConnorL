@@ -32,26 +32,29 @@ public class Driver {
         boolean success;                        //todo remove wk4
 
         //wk5 instantiate & configure Composite obj, pass it to services, print returned output from methods
+        lodge = new Lodge("Alyeska", "Girdwood");
         guest = new LodgeGuest("Arthur", "Dent", "Cottington");
 
-        //room = new Room(42);
-
-        lodge = new Lodge("Alyeska", "Girdwood");
-        //lodge.getRooms().add(room);
+        //add 10 rooms to lodge, (roomNumber, available=true, clean=true)
         for (int i = 0; i < 10; i++) {
-            lodge.getRooms().add(new Room(42+i));
+            lodge.getRooms().add(new Room(42+i, true, true));
         }
+
+        // create reservation and add it to lodge
         res = new Reservation(LocalDate.of(2023, 05, 20), guest, lodge.getRoom(42));
         lodge.getReservations().add(res);
         lodge.addGuest(guest);
-        System.out.println(lodge.getReservations());
+        //System.out.println(lodge.getReservations());
 
-        composite = new Composite(guest, res, lodge);
+        // create composite
+        composite = new Composite(guest, res, lodge.getRoom(42), lodge.getRoom(43), lodge);
         composite.addUpdate(LocalDateTime.now(), "composite created");
+
+        //
         serviceFactory = ServiceFactory.getInstance();
 
         try {
-            resService = (ReservationServiceImpl) serviceFactory.getService(IReservationService.NAME);
+            //resService = (ReservationServiceImpl) serviceFactory.getService(IReservationService.NAME);
 
             //res = resService.createReservation(composite);
             //res.setGuest(guest);
@@ -74,8 +77,8 @@ public class Driver {
             success = manager.performAction("CHECK_INVENTORY", composite);
             System.out.println("CHECK_INVENTORY success: " + success);
 
-        } catch (ServiceLoadException e) {
-            System.err.println("ServiceLoadException from main: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Exception from main: " + e.getMessage());
         }
 
         manager = LodgeReservationManager.getInstance();

@@ -35,7 +35,7 @@ public abstract class ManagerSuperType {
      *
      * @throws PropertyFileNotFoundException    property file did not load, check run configuration
      */
-    private static void loadProperties() throws PropertyFileNotFoundException {
+    static void loadProperties() throws PropertyFileNotFoundException {
 
         // -Dprop_location=<path reference> added run configurations for Driver and Tests (VM option)
         String propertyFileLocation = System.getProperty("prop_location");

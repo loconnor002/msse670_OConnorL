@@ -24,8 +24,8 @@ public class ReservationServiceImpl implements IReservationService {
     /**
      * Cancel a reservation.
      *
-     * @param composite
-     * @return
+     * @param composite     Composite containing the information of the lodge and reservation to be cancelled.
+     * @return              true if reservation was cancelled and its room set to available, false otherwise.
      */
     @Override
     public boolean cancelReservation(Composite composite) throws ReservationException {
@@ -34,7 +34,9 @@ public class ReservationServiceImpl implements IReservationService {
 
         if (res.getID() != null && composite.getLodge().getReservations().contains(res)) {
             System.out.println("Cancelling reservation: " + res);
-
+            composite.getLodge().getReservations().remove(res);
+            composite.getLodge().getCancellations().add(res);
+            res.getRoom().setAvailable(true);
             isCancelled = composite.getLodge().getReservations().contains(res);
         }
         else {
@@ -59,7 +61,7 @@ public class ReservationServiceImpl implements IReservationService {
      * @param lodge
      */
     @Override
-    public void listReservations(Lodge lodge) {
+    public void listReservations(Lodge lodge) throws ReservationException {
         System.out.println(lodge.getLodgeName() + lodge.getReservations());
     }
 
@@ -73,7 +75,7 @@ public class ReservationServiceImpl implements IReservationService {
      * @return      true if operation successful, false otherwise
      */
     @Override
-    public boolean updateReservationRoom(Lodge lodge, Reservation res, Room newRoom) {
+    public boolean updateReservationRoom(Lodge lodge, Reservation res, Room newRoom) throws ReservationException {
         boolean success = false;
         Room oldRoom;
         if (res.getID() != null && lodge.getReservations().contains(res)) {
@@ -90,8 +92,9 @@ public class ReservationServiceImpl implements IReservationService {
             else {
                 System.out.println("Room " + newRoom.getRoomNum() + " not available");
             }
+        } else {
+            System.out.println("Reservation not found, cannot update room for: " + res);
         }
-        System.out.println("Reservation not found, cannot update room for: " + res);
         return success;
     }
 
@@ -104,7 +107,7 @@ public class ReservationServiceImpl implements IReservationService {
      * @return      true if operation successful, false otherwise
      */
     @Override
-    public boolean deleteReservation(Lodge lodge, Reservation res) {
+    public boolean deleteReservation(Lodge lodge, Reservation res) throws ReservationException {
         if (res.getID() != null && lodge.getReservations().contains(res)) {
             lodge.getReservations().remove(res);
             return true;

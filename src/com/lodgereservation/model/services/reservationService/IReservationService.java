@@ -9,10 +9,10 @@ public interface IReservationService extends IService {
     public final String NAME = "IReservationService";
 
     //todo convert all params to ReservationComposite?
-    boolean bookReservation(Composite composite);
+    boolean bookReservation(Composite composite) throws ReservationException;
     boolean cancelReservation(Composite composite) throws ReservationException;
     Reservation createReservation(Composite composite) throws ReservationException;
-    void listReservations(Lodge lodge);
-    boolean updateReservationRoom(Lodge lodge, Reservation res, Room room);
-    boolean deleteReservation(Lodge lodge, Reservation res);
+    void listReservations(Lodge lodge) throws ReservationException;
+    boolean updateReservationRoom(Lodge lodge, Reservation res, Room room) throws ReservationException;
+    boolean deleteReservation(Lodge lodge, Reservation res) throws ReservationException;
 }

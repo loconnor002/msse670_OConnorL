@@ -29,15 +29,12 @@ public class InventoryServiceImpl implements IInventoryService {
     }
 
     @Override
-    public boolean displayAvailableRooms(Composite composite) {
+    public boolean displayAvailableRooms(Composite composite) throws InventoryException {
         ArrayList<Room> rooms;
         rooms = composite.getLodge().getRooms();
         for (Room room : rooms) {
             if (room.getAvailable()) {
                 System.out.println(room);
-            }
-            else {
-                System.out.println("not available");
             }
         }
         return true;

@@ -8,11 +8,13 @@ public class Lodge implements Serializable {
     private String lodgeName;
     private String lodgeAddr;                                           //todo Address or ContactInfo object
     private ArrayList<Reservation> reservations;
+    private ArrayList<Reservation> cancellations;
     private ArrayList<Room> rooms;
     private ArrayList<LodgeGuest> guests;                               /*todo HashSet wrapped in synchronized set https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#synchronizedSet-java.util.Set-
                                                                          * https://docs.oracle.com/javase/8/docs/api/java/util/HashSet.html*/
     public Lodge() {
         reservations = new ArrayList<>();
+        cancellations = new ArrayList<>();
         rooms = new ArrayList<>();
         guests = new ArrayList<>();
     }
@@ -20,6 +22,7 @@ public class Lodge implements Serializable {
     public Lodge(String lodgeName) {
         this.lodgeName = lodgeName;
         reservations = new ArrayList<>();
+        cancellations = new ArrayList<>();
         rooms = new ArrayList<>();
         guests = new ArrayList<>();                                              //default capacity 15, load factor 0.75
     }
@@ -28,6 +31,7 @@ public class Lodge implements Serializable {
         lodgeName = ln;
         lodgeAddr = addr;
         reservations = new ArrayList<>();
+        cancellations = new ArrayList<>();
         rooms = new ArrayList<>();
         guests = new ArrayList<>();
     }
@@ -99,6 +103,14 @@ public class Lodge implements Serializable {
 
     public void setReservations(ArrayList<Reservation> reservations) {
         this.reservations = reservations;
+    }
+
+    public ArrayList<Reservation> getCancellations() {
+        return cancellations;
+    }
+
+    public void setCancellations(ArrayList<Reservation> cancellations) {
+        this.cancellations = cancellations;
     }
 
     public ArrayList<Room> getRooms() {
