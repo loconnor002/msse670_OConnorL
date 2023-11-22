@@ -71,6 +71,9 @@ public class Driver {
             success = manager.performAction("CANCEL_RESERVATION", composite);
             System.out.println("CANCEL RESERVATION success: " + success);
 
+            success = manager.performAction("CHECK_INVENTORY", composite);
+            System.out.println("CHECK_INVENTORY success: " + success);
+
         } catch (ServiceLoadException e) {
             System.err.println("ServiceLoadException from main: " + e.getMessage());
         }
