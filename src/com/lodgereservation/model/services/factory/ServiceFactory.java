@@ -22,7 +22,6 @@ public class ServiceFactory {
      *
      * @param serviceName   the name of a service
      * @return              the service object which matches serviceName
-     * @throws              ServiceLoadException
      */
     public IService getService(String serviceName) throws ServiceLoadException {
         try {

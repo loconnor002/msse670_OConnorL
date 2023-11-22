@@ -33,28 +33,54 @@ public class Driver {
 
         //wk5 instantiate & configure Composite obj, pass it to services, print returned output from methods
         guest = new LodgeGuest("Arthur", "Dent", "Cottington");
-        lodge = new Lodge("Alyeska", "Girdwood");
-        lodge.addGuest(guest);
 
-        composite = new Composite(guest, lodge);
+        //room = new Room(42);
+
+        lodge = new Lodge("Alyeska", "Girdwood");
+        //lodge.getRooms().add(room);
+        for (int i = 0; i < 10; i++) {
+            lodge.getRooms().add(new Room(42+i));
+        }
+        res = new Reservation(LocalDate.of(2023, 05, 20), guest, lodge.getRoom(42));
+        lodge.getReservations().add(res);
+        lodge.addGuest(guest);
+        System.out.println(lodge.getReservations());
+
+        composite = new Composite(guest, res, lodge);
         composite.addUpdate(LocalDateTime.now(), "composite created");
         serviceFactory = ServiceFactory.getInstance();
 
         try {
             resService = (ReservationServiceImpl) serviceFactory.getService(IReservationService.NAME);
-            res = resService.createReservation(composite);
-            success = resService.performAction("RESERVE_ROOM", composite);  //todo call resService or resMgr??
-            res.setGuest(guest);
-            res.setRoom(new Room(44));
-            lodge.addReservation(res);
-            resService.listReservations(lodge);
 
-        } catch (ServiceLoadException | ReservationException e) {
-            e.printStackTrace();
+            //res = resService.createReservation(composite);
+            //res.setGuest(guest);
+            //res.setRoom(new Room(44));
+            //lodge.addReservation(res);
+
+            manager = LodgeReservationManager.getInstance();
+            success = manager.performAction("RESERVE_ROOM", composite);  //todo call resService or resMgr??
+            //resService.listReservations(lodge);
+            System.out.println("RESERVE ROOM success from perform action: " + success);
+
+            //composite = new Composite(guest, res, res.getRoom(), new Room(43), lodge);
+            success = manager.performAction("UPDATE_RESERVATION_ROOM", composite);
+            System.out.println("UpdateReservation success: " + success +
+                    "\nroom after update: " + composite.getReservation().getRoom());
+
+            success = manager.performAction("CANCEL_RESERVATION", composite);
+            System.out.println("CANCEL RESERVATION success: " + success);
+
+        } catch (ServiceLoadException e) {
+            System.err.println("ServiceLoadException from main: " + e.getMessage());
         }
 
+        manager = LodgeReservationManager.getInstance();
+        success = manager.performAction("LOGIN_LODGE_GUEST", composite);
+        System.out.println("Login success: " + success);
 
 
+/*
         // instantiate, initialize, and display a Lodge object
         lodge = new Lodge("Alyeska", "Girdwood");
         //System.out.println("\n" + lodge);
@@ -68,7 +94,7 @@ public class Driver {
         res.setGuest(guest);
         res.setRoom(room);
         room.setAvailable(false);
-        res.setDate(Date.valueOf(LocalDate.now()));
+        res.setDate(LocalDate.now());
 
         // display reservation
         //System.out.println(res);
@@ -81,7 +107,7 @@ public class Driver {
         // instantiate, initialize, and display ReservationComposite object
         composite = new Composite(guest, res, room, lodge);
         composite.addUpdate(LocalDateTime.now(), "composite created");
-        System.out.println(composite.getLodge().getRooms());
+        //System.out.println(composite.getLodge().getRooms());
 
         //System.out.println(composite);
 
@@ -107,18 +133,17 @@ public class Driver {
         try {
             manager = LodgeReservationManager.getInstance();
             success = manager.performAction("RESERVE_ROOM", composite);
-            System.out.println("ReserveRoom success: " + success);
+            //System.out.println("ReserveRoom success: " + success);
 
             success = manager.performAction("LOGIN_LODGE_GUEST", composite);
-            System.out.println("LoginGuest success: " + success);
+            //System.out.println("LoginGuest success: " + success);
 
             success = manager.performAction("CHECK_INVENTORY", composite);
-            System.out.println("CheckInventory success: " + success);
+            //System.out.println("CheckInventory success: " + success);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        /*
         // Demonstrate serviceFactory get login service
         try {
             loginService = (LoginServiceImpl) serviceFactory.getService(ILoginService.NAME);
@@ -130,7 +155,7 @@ public class Driver {
 
         } catch (ServiceLoadException e) {
             e.printStackTrace();
-        }*/
+        }
 
         // Demonstrate service factory get inventory service
         try {
@@ -143,7 +168,7 @@ public class Driver {
         } catch (ServiceLoadException | InventoryException e) {
             e.printStackTrace();
         }
-
+*/
         // create new service factory
         // todo remove serviceFactory = new ServiceFactory();
 
@@ -180,9 +205,11 @@ public class Driver {
         System.out.println(lodge.getReservations());
         System.out.println(lodge.getGuests());
 
-         */
+
         manager = LodgeReservationManager.getInstance();
         success = manager.performAction("BOOK_RESERVATION", composite);
         System.out.println("BookReservation success: " + success);
+
+         */
     }
 }

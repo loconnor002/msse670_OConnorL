@@ -55,6 +55,23 @@ public class Lodge implements Serializable {
         return Objects.equals(lodgeName, lodge.lodgeName) && Objects.equals(lodgeAddr, lodge.lodgeAddr) && Objects.equals(reservations, lodge.reservations) && Objects.equals(rooms, lodge.rooms) && Objects.equals(guests, lodge.guests);
     }
 
+    /**
+     * Get room by room number.
+     *
+     * @param roomNum   int number of desired room
+     * @return          the desired room if it exists in the lodge, otherwise a dummy room with number -99
+     */
+    public Room getRoom(int roomNum) {
+        Room room = new Room(-99);
+        for (Room elem : rooms) {
+            if (elem.getRoomNum() == roomNum) {
+                room = elem;
+            }
+        }
+        return room;
+    }
+
+
     @Override
     public int hashCode() {
         return Objects.hash(lodgeName, lodgeAddr, reservations, rooms, guests);

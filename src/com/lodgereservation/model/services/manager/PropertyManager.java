@@ -24,26 +24,37 @@ public class PropertyManager {
             sf = new FileInputStream(propertyFileLocation);
 
         } catch (FileNotFoundException fnfe) {
-            System.out.println("Property file not found: " + propertyFileLocation);
+            System.err.println("Property file not found: " + propertyFileLocation);
             throw new PropertyFileNotFoundException("Property file not found.", fnfe);
 
         } catch (IOException ioe) {
-            System.out.println("IOException while loading Properties file.");
+            //todo remove? unreachable?
+            System.err.println("IOException while loading Properties file: " + ioe.getMessage());
             throw new PropertyFileNotFoundException("IOException while loading Properties file.", ioe);
 
         } catch (Exception e) {
-            System.out.println("Exception while loading Properties file.");
+            System.err.println("Exception while loading properties file: " + e.getMessage());
             throw new PropertyFileNotFoundException("Exception while loading Properties file.", e);
-
         } finally {
             if (sf != null) {
                 try {
                     sf.close();
 
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    System.err.println("IOException from PropertyManager: " + e.getMessage());
                 }
             }
         }
+    } // end loadProperties()
+
+
+    /**
+     * Return the Value for the passed Key
+     *  //todo - use in week 6-8?
+     * @param key
+     * @return
+     */
+    static public String getPropertyValue(String key) {
+        return properties.getProperty(key);
     }
 }

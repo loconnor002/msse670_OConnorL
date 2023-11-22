@@ -14,12 +14,12 @@ public class Room implements Serializable {
     public Room() {
         roomNum = -99;
         roomName = "";
-        available = false;
+        available = true;
         clean = true;
     }
 
     public Room(int roomNum) {
-        this.available = false;
+        this.available = true;
         this.roomName = "";
         this.roomNum = roomNum;
         clean = true;

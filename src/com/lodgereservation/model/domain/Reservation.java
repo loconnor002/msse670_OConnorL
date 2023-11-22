@@ -2,13 +2,14 @@ package com.lodgereservation.model.domain;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 
 public class Reservation implements Serializable {
 
     private final UUID RES_ID;                                          //todo static?
-    private Date date;
+    private LocalDate date;
     private LodgeGuest guest;
     private Room room;
 
@@ -16,7 +17,7 @@ public class Reservation implements Serializable {
         RES_ID = UUID.randomUUID();
     }
 
-    public Reservation(Date date, LodgeGuest guest, Room room) {
+    public Reservation(LocalDate date, LodgeGuest guest, Room room) {
         this.RES_ID = UUID.randomUUID();
         this.date = date;
         this.guest = guest;
@@ -55,11 +56,11 @@ public class Reservation implements Serializable {
         return this.RES_ID;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

@@ -39,80 +39,112 @@ public class LodgeReservationManager extends ManagerSuperType {
      * to perform certain named actions.
      *
      * @param commandString holds the name of the action to be performed
-     * @param composite     holds application-specific domain state //todo understand
+     * @param composite     holds application-specific domain state
      * @return action       true if the action was successful, false otherwise
      */
     public boolean performAction(String commandString, Composite composite) {
         boolean action = false;
         if (commandString.equals("RESERVE_ROOM")) {
-            action = bookReservation(IReservationService.NAME, composite);
+            action = bookReservation(composite);
         }
         else if (commandString.equals("LOGIN_LODGE_GUEST")) {
-            action = loginLodgeGuest(ILoginService.NAME, composite);
+            action = loginLodgeGuest(composite);
         }
         else if (commandString.equals("CHECK_INVENTORY")) {
-            action = checkInventory(IInventoryService.NAME, composite);
+            action = checkInventory(composite);
+        }
+        else if (commandString.equals("UPDATE_RESERVATION_ROOM")) {
+            action = updateReservationRoom(composite);
+        }
+        else if (commandString.equals("CANCEL_RESERVATION")) {
+            action = cancelReservation(composite);
         }
         else {
-            System.out.println("INFO:   Add new workflows here using if/else.");
+            //System.out.println("INFO:   Add new workflows here using if/else.");
+            System.out.println("NO ACTION PERFORMED... LodgeReservationMgr:: commandString: " + commandString);
         }
         return action;
+    }
+
+    private boolean updateReservationRoom(Composite composite) {
+        boolean isUpdated = false;
+        ServiceFactory sf = ServiceFactory.getInstance();
+        IReservationService reservationService;
+
+        try {
+            reservationService = (IReservationService) sf.getService(IReservationService.NAME);
+            isUpdated = reservationService.updateReservationRoom(composite.getLodge(), composite.getReservation(), composite.getNewRoom());
+        } catch(ServiceLoadException sle) {
+            System.err.println("ServiceLoadException from LodgeReservationManager: " + sle.getMessage());
+        }
+        return isUpdated;
     }
 
 
     /**
      * Book a reservation.
      *
-     * @param commandString the name of the service to be invoked
-     * @param composite     the application-specific domain state
-     * @return              true if the reservation was successful, false otherwise
-     * @see                 "LodgeReservationManager.performAction(String, Composite)"
+     * @param composite the application-specific domain state
+     * @return true if the reservation was successful, false otherwise
+     * @see "LodgeReservationManager.performAction(String, Composite)"
      */
-    private boolean bookReservation(String commandString, Composite composite) {
-        // todo, changed to private (notes p. 35) - find caller in sample code?
+    private boolean bookReservation(Composite composite) {
 
         boolean isBooked = false;
-
-        ServiceFactory serviceFactory = ServiceFactory.getInstance();
+        ServiceFactory sf = ServiceFactory.getInstance();
         IReservationService reservationService;
 
+         // Propagate errors up the call stack, to be caught here in the Business Layer.
+         // https://docs.oracle.com/javase/tutorial/essential/exceptions/advantages.html
         try {
-            reservationService = (IReservationService) serviceFactory.getService(commandString);
+            reservationService = (IReservationService) sf.getService(IReservationService.NAME);
             isBooked = reservationService.bookReservation(composite);
 
         } catch (ServiceLoadException sle) {
-            sle.printStackTrace();
-            System.out.println("ERROR: LodgeReservationManager:: failed to load Reservation Service");
-        }/* catch (ReservationException re) {
-            System.out.println("ERROR: LodgeReservationManager:: bookReservation() failed");
-            re.printStackTrace();
-        }*/
+            System.err.println("ServiceLoadException from LodgeReservationManager: " + sle.getMessage());
+        }
         return isBooked;
+    }
+
+    private boolean cancelReservation(Composite composite) {
+        boolean isCancelled = false;
+        ServiceFactory sf = ServiceFactory.getInstance();
+        IReservationService reservationService;
+
+        try {
+            reservationService = (IReservationService) sf.getService(IReservationService.NAME);
+            isCancelled = reservationService.cancelReservation(composite);
+        } catch (ServiceLoadException sle) {
+            System.err.println("ServiceLoadException from LodgeReservationManager: " + sle.getMessage());
+        } catch (ReservationException e) {
+            System.err.println("ReservationException from LodgeReservationManager: " + e.getMessage());
+            //throw new RuntimeException(e);
+        }
+        return isCancelled;
     }
 
     /**
      * Log in a lodge guest.
      *
-     * @param commandString the name of the service to be invoked
-     * @param composite     the application-specific domain state
-     * @return              true if the reservation was successful, false otherwise
-     * @see                 "LodgeReservationManager.performAction(String, Composite)"
+     * @param composite the application-specific domain state
+     * @return true if the reservation was successful, false otherwise
+     * @see "LodgeReservationManager.performAction(String, Composite)"
      */
-    private boolean loginLodgeGuest(String commandString, Composite composite) {
+    private boolean loginLodgeGuest(Composite composite) {
         boolean isLoggedIn = false;
 
         ServiceFactory sf = ServiceFactory.getInstance();
         ILoginService iLoginService;
 
         try {
-            iLoginService = (ILoginService) sf.getService(commandString);
+            iLoginService = (ILoginService) sf.getService(ILoginService.NAME);
             isLoggedIn = iLoginService.authenticateUser(composite, composite.getGuest().getPassword());
 
         } catch (ServiceLoadException sle) {
-            sle.printStackTrace();
-            System.out.println("ERROR: LodgeReservationManager:: failed to load Login Service");
+            System.err.println("ERROR: LodgeReservationManager:: failed to load Login Service " + sle.getMessage());
+
         } catch (LoginException e) {
-            System.out.println("ERROR: LodgeReservationManager:: login failed");
+            System.err.println("ERROR: LodgeReservationManager:: login failed " + e.getMessage());
             throw new RuntimeException(e);
         }
         return isLoggedIn;
@@ -122,29 +154,28 @@ public class LodgeReservationManager extends ManagerSuperType {
     /**
      * Log in a lodge guest.
      *
-     * @param commandString the name of the service to be invoked
-     * @param composite     the application-specific domain state
-     * @return              true if the reservation was successful, false otherwise
-     * @see                 "LodgeReservationManager.performAction(String, Composite)"
+     * @param composite the application-specific domain state
+     * @return true if the reservation was successful, false otherwise
+     * @see "LodgeReservationManager.performAction(String, Composite)"
      */
-    private boolean checkInventory(String commandString, Composite composite) {
+    private boolean checkInventory(Composite composite) {
         boolean isChecked = false;
 
         ServiceFactory sf = ServiceFactory.getInstance();
         IInventoryService iInventoryService;
 
         try {
-            iInventoryService = (IInventoryService) sf.getService(commandString);
+            iInventoryService = (IInventoryService) sf.getService(IInventoryService.NAME);
             isChecked = iInventoryService.displayAvailableRooms(composite);
 
         } catch (ServiceLoadException sle) {
-            sle.printStackTrace();
-            System.out.println("ERROR: LodgeReservationManager:: failed to load Inventory Service");
+            System.err.println("ERROR: LodgeReservationManager:: failed to load Inventory Service");
         }
         catch (InventoryException ie) {
-            ie.printStackTrace();
-            System.out.println("ERROR: LodgeReservationManager:: failed to load Reservation Service");
+            System.err.println("ERROR: LodgeReservationManager:: failed to load Reservation Service");
         }
         return isChecked;
     }
+
+
 }

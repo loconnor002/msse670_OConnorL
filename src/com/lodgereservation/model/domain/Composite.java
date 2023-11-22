@@ -10,6 +10,7 @@ public class Composite implements Serializable {
     private LodgeGuest guest;
     private Reservation reservation;
     private Room room;
+    private Room newRoom;
     private HashMap<LocalDateTime, String> updates;
 
     public Composite() {
@@ -17,6 +18,7 @@ public class Composite implements Serializable {
         guest = new LodgeGuest();
         reservation = new Reservation();
         room = new Room();
+        newRoom = new Room(-999);
         updates = new HashMap<>();
     }
 
@@ -25,6 +27,16 @@ public class Composite implements Serializable {
         this.guest = guest;
         this.reservation = res;
         this.room = room;
+        newRoom = new Room(-999);
+        updates = new HashMap<>();
+    }
+
+    public Composite(LodgeGuest guest, Reservation res, Room room, Room newRoom, Lodge lodge) {
+        this.lodge = lodge;
+        this.guest = guest;
+        this.reservation = res;
+        this.room = room;
+        this.newRoom = newRoom;
         updates = new HashMap<>();
     }
 
@@ -33,6 +45,16 @@ public class Composite implements Serializable {
         this.guest = guest;
         this.reservation = new Reservation();
         this.room = new Room();
+        this.newRoom = new Room(-999);
+        updates = new HashMap<>();
+    }
+
+    public Composite(LodgeGuest guest, Reservation res, Lodge lodge) {
+        this.lodge = lodge;
+        this.guest = guest;
+        this.reservation = res;
+        this.room = new Room();
+        newRoom = new Room(-999);
         updates = new HashMap<>();
     }
 
@@ -74,6 +96,7 @@ public class Composite implements Serializable {
     public Room getRoom() {
         return room;
     }
+    public Room getNewRoom() { return newRoom; }
 
     public void setRoom(Room room) {
         this.room = room;
