@@ -41,6 +41,7 @@ public class ReservationServiceImpl implements IReservationService {
         }
         else {
             System.out.println("Unable to cancel reservation: " + res);
+            throw new ReservationException("Unable to cancel reservation: " + res);
         }
         return isCancelled;
     }
@@ -63,6 +64,7 @@ public class ReservationServiceImpl implements IReservationService {
     @Override
     public void listReservations(Lodge lodge) throws ReservationException {
         System.out.println(lodge.getLodgeName() + lodge.getReservations());
+
     }
 
 
@@ -78,6 +80,7 @@ public class ReservationServiceImpl implements IReservationService {
     public boolean updateReservationRoom(Lodge lodge, Reservation res, Room newRoom) throws ReservationException {
         boolean success = false;
         Room oldRoom;
+
         if (res.getID() != null && lodge.getReservations().contains(res)) {
             oldRoom = res.getRoom();
             if (newRoom.getAvailable() && newRoom.getClean()) {
@@ -91,9 +94,11 @@ public class ReservationServiceImpl implements IReservationService {
             }
             else {
                 System.out.println("Room " + newRoom.getRoomNum() + " not available");
+                throw new ReservationException("Room " + newRoom + " is not available");
             }
         } else {
             System.out.println("Reservation not found, cannot update room for: " + res);
+            throw new ReservationException("Unable to update reservation: " + res);
         }
         return success;
     }

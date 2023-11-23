@@ -27,11 +27,6 @@ public class PropertyManager {
             System.err.println("Property file not found: " + propertyFileLocation);
             throw new PropertyFileNotFoundException("Property file not found.", fnfe);
 
-        } catch (IOException ioe) {
-            //todo remove? unreachable?
-            System.err.println("IOException while loading Properties file: " + ioe.getMessage());
-            throw new PropertyFileNotFoundException("IOException while loading Properties file.", ioe);
-
         } catch (Exception e) {
             System.err.println("Exception while loading properties file: " + e.getMessage());
             throw new PropertyFileNotFoundException("Exception while loading Properties file.", e);

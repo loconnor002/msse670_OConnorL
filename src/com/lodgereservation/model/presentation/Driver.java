@@ -39,6 +39,7 @@ public class Driver {
             success = manager.performAction("RESERVE_ROOM", composite);
             System.out.println("RESERVE ROOM success from perform action: " + success);
 
+
             System.out.println("room before update: " + composite.getReservation().getRoom());
             success = manager.performAction("UPDATE_RESERVATION_ROOM", composite);
             System.out.println("UpdateReservation success: " + success +
