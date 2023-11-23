@@ -24,7 +24,7 @@ public class Driver {
         }
 
         // create reservation and add it to lodge
-        res = new Reservation(LocalDate.of(2023, 05, 20), guest, lodge.getRoom(42));
+        res = new Reservation(LocalDate.of(2023, 5, 20), guest, lodge.getRoom(42));
         lodge.getRoom(42).setAvailable(false);
         lodge.getReservations().add(res);
         lodge.addGuest(guest);

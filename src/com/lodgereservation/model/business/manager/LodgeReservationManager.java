@@ -44,24 +44,14 @@ public class LodgeReservationManager extends ManagerSuperType {
      */
     public boolean performAction(String commandString, Composite composite) {
         boolean action = false;
-        if (commandString.equals("RESERVE_ROOM")) {
-            action = bookReservation(composite);
-        }
-        else if (commandString.equals("LOGIN_LODGE_GUEST")) {
-            action = loginLodgeGuest(composite);
-        }
-        else if (commandString.equals("CHECK_INVENTORY")) {
-            action = checkInventory(composite);
-        }
-        else if (commandString.equals("UPDATE_RESERVATION_ROOM")) {
-            action = updateReservationRoom(composite);
-        }
-        else if (commandString.equals("CANCEL_RESERVATION")) {
-            action = cancelReservation(composite);
-        }
-        else {
-            //System.out.println("INFO:   Add new workflows here using if/else.");
-            System.out.println("NO ACTION PERFORMED... LodgeReservationMgr:: commandString: " + commandString);
+        switch (commandString) {
+            case "RESERVE_ROOM" -> action = bookReservation(composite);
+            case "LOGIN_LODGE_GUEST" -> action = loginLodgeGuest(composite);
+            case "CHECK_INVENTORY" -> action = checkInventory(composite);
+            case "UPDATE_RESERVATION_ROOM" -> action = updateReservationRoom(composite);
+            case "CANCEL_RESERVATION" -> action = cancelReservation(composite);
+            default ->
+                    System.out.println("NO ACTION PERFORMED... LodgeReservationMgr:: commandString: " + commandString);
         }
         return action;
     }
