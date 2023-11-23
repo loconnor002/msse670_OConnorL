@@ -139,7 +139,6 @@ public class LodgeReservationManager extends ManagerSuperType {
 
         } catch (LoginException e) {
             System.err.println("ERROR: LodgeReservationManager:: login failed " + e.getMessage());
-            throw new RuntimeException(e);
         }
         return isLoggedIn;
     }
@@ -163,10 +162,10 @@ public class LodgeReservationManager extends ManagerSuperType {
             isChecked = iInventoryService.displayAvailableRooms(composite);
 
         } catch (ServiceLoadException sle) {
-            System.err.println("ERROR: LodgeReservationManager:: failed to load Inventory Service");
+            System.err.println("ERROR: LodgeReservationManager:: failed to load Inventory Service" + sle.getMessage());
         }
         catch (InventoryException ie) {
-            System.err.println("ERROR: LodgeReservationManager:: failed to load Reservation Service");
+            System.err.println("ERROR: LodgeReservationManager:: failed to load Reservation Service" + ie.getMessage());
         }
         return isChecked;
     }

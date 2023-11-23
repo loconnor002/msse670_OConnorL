@@ -1,7 +1,6 @@
 package com.lodgereservation.model.domain;
 
 import java.io.Serializable;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;

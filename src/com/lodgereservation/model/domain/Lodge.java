@@ -13,18 +13,11 @@ public class Lodge implements Serializable {
     private ArrayList<LodgeGuest> guests;                               /*todo HashSet wrapped in synchronized set https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html#synchronizedSet-java.util.Set-
                                                                          * https://docs.oracle.com/javase/8/docs/api/java/util/HashSet.html*/
     public Lodge() {
-        reservations = new ArrayList<>();
+        reservations = new ArrayList<>();   //default capacity 15, load factor 0.75
+
         cancellations = new ArrayList<>();
         rooms = new ArrayList<>();
         guests = new ArrayList<>();
-    }
-
-    public Lodge(String lodgeName) {
-        this.lodgeName = lodgeName;
-        reservations = new ArrayList<>();
-        cancellations = new ArrayList<>();
-        rooms = new ArrayList<>();
-        guests = new ArrayList<>();                                              //default capacity 15, load factor 0.75
     }
 
     public Lodge(String ln, String addr) {

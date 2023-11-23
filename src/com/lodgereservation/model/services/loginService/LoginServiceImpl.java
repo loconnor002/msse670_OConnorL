@@ -12,12 +12,9 @@ public class LoginServiceImpl implements ILoginService {
      */
     @Override
     public boolean authenticateUser(Composite composite, String password) {
-        //todo implement password check. Store password in database? salted & hashed?
-
-        if (findUser(composite) && password.equals(composite.getGuest().getPassword()))
-            return true;
-
-        return false;
+        //todo store password in database? salted & hashed?
+        //todo make login for Person?
+        return (findUser(composite) && password.equals(composite.getGuest().getPassword()));
     }
 
     /**

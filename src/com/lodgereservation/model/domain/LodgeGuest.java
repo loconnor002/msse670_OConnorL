@@ -30,17 +30,13 @@ public class LodgeGuest extends Person implements Serializable {
      * @return true if parameters contain appropriate values, false otherwise
      */
     public boolean validate() {
-        if (GUEST_ID != null && !firstName.isBlank()
+        return GUEST_ID != null && !firstName.isBlank()
                 && !lastName.isBlank() && !address.isBlank()
-                && email.contains("@")) {
-            return true;
-        }
-        return false;
+                && email.contains("@");
     }
 
     @Override
     public String toString() {
-        //todo, StringBuffer?
         return "LodgeGuest{Guest ID=" + GUEST_ID +
                 ", FirstName=" + firstName +
                 ", LastName=" + lastName +

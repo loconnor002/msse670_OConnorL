@@ -96,6 +96,7 @@ public class Composite implements Serializable {
     public Room getRoom() {
         return room;
     }
+
     public Room getNewRoom() { return newRoom; }
 
     public void setRoom(Room room) {

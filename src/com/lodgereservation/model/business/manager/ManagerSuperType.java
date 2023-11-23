@@ -12,8 +12,7 @@ public abstract class ManagerSuperType {
             ManagerSuperType.loadProperties();
 
         } catch (PropertyFileNotFoundException pfnfe) {
-            pfnfe.printStackTrace();
-            System.out.println("Application properties failed to load - Application exiting...");
+            System.err.println("Application properties failed to load - Application exiting...");
             System.exit(1);
         }
     }
