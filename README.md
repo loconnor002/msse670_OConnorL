@@ -1,5 +1,8 @@
 # msse670_OConnorL
 
+sequence diagram, week 6
+![image](https://github.com/loconnor002/msse670_OConnorL/assets/148510444/39e10ad2-29b3-481e-aa62-a9c6c46fe178)
+
 UML Domain Layer
 ![image](https://github.com/loconnor002/msse670_OConnorL/assets/148510444/0a6d6bcf-3bb5-4efd-8fc2-b5dbf45247e2)
 
