@@ -29,15 +29,6 @@ public class Person implements Serializable {
         email = "";
     }
 
-    public Person(String firstName, String lastName, String address, String email) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.address = address;
-        this.password = "default password";
-        phone = "";
-        this.email = email;
-    }
-
     public Person(String firstName, String lastName, String phone, String email, String address, String password) {
         this.address = address;
         this.email = email;
@@ -45,6 +36,15 @@ public class Person implements Serializable {
         this.lastName = lastName;
         this.phone = phone;
         this.password = password;
+    }
+
+    public Person(String firstName, String lastName, String email, String phone){
+        address = "";
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.password = "default password";
     }
 
     public String getAddress() {

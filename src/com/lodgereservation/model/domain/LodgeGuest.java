@@ -23,6 +23,12 @@ public class LodgeGuest extends Person implements Serializable {
         this.GUEST_ID = UUID.randomUUID();
     }
 
+    public LodgeGuest(UUID id, String firstName, String lastName, String email, String phone) {
+        super(firstName, lastName, email, phone);
+        this.GUEST_ID = id;
+
+    }
+
     /**
      * Validate parameter values, check if guest ID is not null,
      * email contains an '@' character, and names are not blank.

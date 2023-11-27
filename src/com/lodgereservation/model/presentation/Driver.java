@@ -2,8 +2,14 @@ package com.lodgereservation.model.presentation;
 
 import com.lodgereservation.model.business.manager.LodgeReservationManager;
 import com.lodgereservation.model.domain.*;
+import com.lodgereservation.model.persistence.ReservationDao;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class Driver {
     public static void main(String[] args) {
@@ -11,8 +17,12 @@ public class Driver {
         Lodge lodge;
         LodgeGuest guest;
         Reservation res;
+        ReservationDao database;
         LodgeReservationManager manager;
         Composite composite;
+        ArrayList<LodgeGuest> guestList;
+
+
 
         //wk5 instantiate & configure Composite obj, pass it to services, print returned output from methods
         lodge = new Lodge("Alyeska", "Girdwood");
@@ -53,6 +63,16 @@ public class Driver {
 
         } catch (Exception e) {
             System.err.println("Exception from main: " + e.getMessage());
+        }
+
+        try {
+            database = new ReservationDao();
+            success = database.add(res);
+            guestList = database.getAll();
+            System.out.println("Guests from DB:\n" + guestList + success);
+        } catch (Exception e) {
+            System.err.println(e);
+            //todo error handling
         }
 
         manager = LodgeReservationManager.getInstance();
