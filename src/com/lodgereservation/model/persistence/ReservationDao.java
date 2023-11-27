@@ -14,9 +14,8 @@ import java.util.UUID;
  *
  * @author lauren.oconnor
  */
-public class ReservationDao implements Dao<Reservation> {
+public class ReservationDao implements Dao<LodgeGuest> {
 
-    private ArrayList<Reservation> reservationList;
     private ArrayList<LodgeGuest> guestList;
     private Connection connection;
     private Statement statement;
@@ -41,7 +40,6 @@ public class ReservationDao implements Dao<Reservation> {
         LodgeGuest guest;
         try {
             while (resultSet.next()) {
-                System.out.println(resultSet.getString("uuid"));
                 guest = new LodgeGuest(UUID.fromString(resultSet.getString("uuid")),
                         resultSet.getString("firstname"),
                         resultSet.getString("lastname"),
@@ -57,13 +55,12 @@ public class ReservationDao implements Dao<Reservation> {
     }
 
     @Override
-    public boolean add(Reservation reservation) {
+    public boolean add(LodgeGuest guest) {
         boolean success = false;
 
-        LodgeGuest guest = reservation.getGuest();
-        System.out.println(guest.getFirstName() + " ID: " + guest.getID());
         try {
             statement = connection.createStatement();
+
             statement.execute("insert into reservations.guests (uuid, firstname, lastname, email, phone) " +
                     "values ('" + guest.getID() + "', '" + guest.getFirstName() +"', '" +  guest.getLastName() +"', '" +  guest.getEmail() + "', '" + guest.getPhone() + "');");
             success = true;
@@ -74,12 +71,12 @@ public class ReservationDao implements Dao<Reservation> {
     }
 
     @Override
-    public boolean update(Reservation item) {
+    public boolean update(LodgeGuest guest) {
         return false;
     }
 
     @Override
-    public boolean delete(Reservation item) {
+    public boolean delete(LodgeGuest guest) {
         return false;
     }
 }
