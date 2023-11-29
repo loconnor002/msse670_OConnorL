@@ -6,6 +6,8 @@ import com.lodgereservation.model.domain.Reservation;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Description: This class acts as a Data Access Object interface between
@@ -15,6 +17,11 @@ import java.util.UUID;
  * @author lauren.oconnor
  */
 public class ReservationDao implements Dao<LodgeGuest> {
+
+    /* Pattern object creates a regex pattern for validating email addresses
+     * used with Matcher object in ReservationDao.validate() to prevent SQL injection
+     */
+    private final Pattern VALID_EMAIL_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$");
 
     private ArrayList<LodgeGuest> guestList;
     private Connection connection;
@@ -35,6 +42,7 @@ public class ReservationDao implements Dao<LodgeGuest> {
         }
     }
 
+
     @Override
     public ArrayList<LodgeGuest> getAll() {
         LodgeGuest guest;
@@ -54,15 +62,29 @@ public class ReservationDao implements Dao<LodgeGuest> {
         return guestList;
     }
 
+    //todo javadoc
     @Override
     public boolean add(LodgeGuest guest) {
         boolean success = false;
+        PreparedStatement ps;
+        String fn, ln, email, phone;
+        fn = guest.getFirstName();
+        ln = guest.getLastName();
+        email = guest.getEmail();
+        phone = guest.getPhone();
+        //validate length of Strings
+        boolean validNames, validPhone;
 
+        validNames = (fn.length() + ln.length() < 60) && fn.matches("^[a-zA-Z.\\-' ]") && ln.matches("^[a-zA-Z.\\-' ]");
+        validPhone = true;
+        assert(validNames && validateEmail(email) && validPhone);
+//todo build statement to add guest to database
         try {
-            statement = connection.createStatement();
 
-            statement.execute("insert into reservations.guests (uuid, firstname, lastname, email, phone) " +
-                    "values ('" + guest.getID() + "', '" + guest.getFirstName() +"', '" +  guest.getLastName() +"', '" +  guest.getEmail() + "', '" + guest.getPhone() + "');");
+            statement = connection.createStatement();   //todo difference between .createStatement() and .prepareStatement?
+            ps = connection.prepareStatement("insert into reservations.guests (uuid, firstname, lastname, email, phone) " +
+                    "values ('" + guest.getID() + "', '" + guest.getFirstName() + "', '" + guest.getLastName() + "', '" + guest.getEmail() + "', '" + guest.getPhone() + "');");
+            ps.execute();
             success = true;
         } catch (SQLException e) {
             System.err.println("From ResDao.add() " + e);
@@ -78,5 +100,20 @@ public class ReservationDao implements Dao<LodgeGuest> {
     @Override
     public boolean delete(LodgeGuest guest) {
         return false;
+    }
+
+
+    /**
+     * Validate an email address before adding it to the SQL database,
+     * to defend against SQL injection attacks.
+     *
+     * @param email String containing email address
+     * @return true if email conforms to regex pattern, false otherwise
+     */
+    private boolean validateEmail(String email) {
+        Matcher matcher;
+        matcher = VALID_EMAIL_REGEX.matcher(email);
+
+        return matcher.matches();
     }
 }
