@@ -77,6 +77,7 @@ public class ReservationDao implements Dao<Composite> {
         int count = 0;
         PreparedStatement pstmt;
         String firstname, lastname, phone, email, query;
+        ResultSet resultSet2;
 
         query = "insert into reservations.guests (uuid, firstname, lastname, email, phone) values (?, ?, ?, ?, ?);";
         firstname = guest.getFirstName();
@@ -87,16 +88,18 @@ public class ReservationDao implements Dao<Composite> {
         //validate guest fields
         if (validateNames(firstname, lastname) && validateEmail(email) && validatePhone(phone)) {
             try {
-                //insert guest into database
-                // use parameterized query instead of String query to guard against SQL injection (owasp.org)
-                pstmt = connection.prepareStatement(query);
-                pstmt.setString(1, guest.getID().toString());
-                pstmt.setString(2, firstname);
-                pstmt.setString(3, lastname);
-                pstmt.setString(4, email);
-                pstmt.setString(5, phone);
-                count = pstmt.executeUpdate();
-
+                resultSet2 = search(composite);  //empty if no duplicates found
+                if (!resultSet2.next()) {
+                    //insert guest into database
+                    // use parameterized query instead of String query to guard against SQL injection (owasp.org)
+                    pstmt = connection.prepareStatement(query);
+                    pstmt.setString(1, guest.getID().toString());
+                    pstmt.setString(2, firstname);
+                    pstmt.setString(3, lastname);
+                    pstmt.setString(4, email);
+                    pstmt.setString(5, phone);
+                    count = pstmt.executeUpdate();
+                }
             } catch (SQLException e) {
                 System.err.println("From ResDao.add() " + e);
             }
@@ -109,22 +112,19 @@ public class ReservationDao implements Dao<Composite> {
     public boolean update(@NotNull Composite composite) {
         int count = 0;
         LodgeGuest guest = composite.getGuest();
-
+        ResultSet resultSet5;
         assert guest != null : "Null guest";
         String guestID = guest.getID().toString();
-        String query = "select * from reservations.guests where uuid=?;";           //todo helper method, find records?
         String query2;
         PreparedStatement pstmt;
 
         try {
-            pstmt = connection.prepareStatement(query);
-            pstmt.setString(1, guestID);
-            resultSet = pstmt.executeQuery();
-            resultSet.next();
+            resultSet5 = search(composite);//pstmt.executeQuery();
+            resultSet5.next();
 
-            //update changed phone number
-            if (!guest.getPhone().equals(resultSet.getString("phone"))) {
-                System.out.println(guest.getPhone() + " " + resultSet.getString("phone"));
+            //update changed phone number if it is not the same as the existing number
+            if (!guest.getPhone().equals(resultSet5.getString("phone"))) {
+                //System.out.println(guest.getPhone() + " " + resultSet5.getString("phone"));
                 query2 = "update reservations.guests set phone=? where uuid=?;";
                 pstmt = connection.prepareStatement(query2);
                 pstmt.setString(1, guest.getPhone());
@@ -153,23 +153,22 @@ public class ReservationDao implements Dao<Composite> {
 
         assert guest != null : "Guest is null";
         guestID = guest.getID().toString();
-        query = "select * from reservations.guests where uuid=?;";
         PreparedStatement pstmt;
+        ResultSet resultSet3;
 
         try {
             // if guest is not null, make sure guest exists in the database
-            // use parameterized query instead of String query to guard against SQL injection (owasp.org)
-            pstmt = connection.prepareStatement(query);
-            pstmt.setString(1, guestID);
+            resultSet3 = search(composite);
 
-            // attempt to find guest in the database
-            resultSet = pstmt.executeQuery();
-
-            // guest was found in the database, proceed to delete
-            query = "delete from reservations.guests where uuid=?;";
-            pstmt = connection.prepareStatement(query);
-            pstmt.setString(1, guestID);
-            count = pstmt.executeUpdate();                              // number of rows changed
+            if (resultSet3.next()) {
+                // guest was found in the database, proceed to delete
+                query = "delete from reservations.guests where uuid=?;";
+                pstmt = connection.prepareStatement(query);
+                pstmt.setString(1, guestID);
+                count = pstmt.executeUpdate();                              // number of rows changed
+            } else {
+                System.out.println(guest.getFirstName() + " not found in the database. Cannot delete.");
+            }
         } catch (SQLException e) {
             System.err.println(e);
         }
@@ -232,5 +231,26 @@ public class ReservationDao implements Dao<Composite> {
             System.err.println(e);
         }
         return validPhone;
+    }
+
+
+    /**
+     * Search for a record by ID number.
+     *
+     * @param composite     Composite object containing a desired LodgeGuest
+     * @return              a ResultSet containing the Lodge guest, if found, otherwise an empty ResultSet
+     */
+    private ResultSet search(@NotNull Composite composite) {
+        ResultSet resultSet4 = null;
+        PreparedStatement pstmt;
+        String query = "select * from reservations.guests where uuid=?;";
+        try {
+            pstmt = connection.prepareStatement(query);
+            pstmt.setString(1, composite.getGuest().getID().toString());
+            resultSet4 = pstmt.executeQuery();
+        } catch (SQLException e) {
+            System.err.println(e);
+        }
+        return resultSet4;
     }
 }

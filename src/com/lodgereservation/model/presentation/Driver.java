@@ -27,29 +27,29 @@ public class Driver {
             // Create database
             database = new ReservationDao();
             success = database != null;
-            System.out.println("Create database success: " + success);
+            System.out.println("Create database connection: success=" + success);
 
-            // Update database (add a guest)
-            success = database.add(composite);
-            System.out.println("Update database success (insert a new LodgeGuest) : " + success);
-
-            guest.setPhone("19703333333");
-            composite.setGuest(guest);
-            success = database.update(composite);
-            System.out.println("Update database success (change LodgeGuest phone) : " + success);
-
-/*
             // Read from database
             guestList = database.getAll();
-            System.out.println("Read database success: " + success + "\n Guests from DB:");
+            success = !guestList.isEmpty();
+            System.out.println("Read database: success=" + success + "\n Guests from DB:");
             for (LodgeGuest g : guestList) {
                 System.out.println(" " + g);
             }
 
+            // Update database (add a guest)
+            success = database.add(composite);
+            System.out.println("Update database (insert a new LodgeGuest): success=" + success);
+
+            guest.setPhone("19703333333");
+            composite.setGuest(guest);
+            success = database.update(composite);
+            System.out.println("Update database (change LodgeGuest phone): success=" + success);
+
             // Delete from database
             success = database.delete(composite);
-            System.out.println("Delete from database success: " + success);
-*/
+            System.out.println("Delete from database: success=" + success);
+
         } catch (NullPointerException e) {
             System.err.println(e);
         } catch (Exception e) {
