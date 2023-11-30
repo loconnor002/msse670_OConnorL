@@ -7,6 +7,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.management.monitor.GaugeMonitor;
 import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ReservationDaoTest {
 
+    private Composite composite;
     private Connection connection;
     private Statement statement;
     private ResultSet resultSet;
@@ -24,7 +26,9 @@ class ReservationDaoTest {
 
     @BeforeEach
     void setUp() {
-        guest = new LodgeGuest();
+        guest = new LodgeGuest("TestFN", "TestLN", "TestEM@email.com", "19701111111");
+        composite = new Composite();
+        composite.setGuest(guest);
         try {
             connection = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/reservations",
@@ -77,7 +81,7 @@ class ReservationDaoTest {
 
     @Test
     void testAdd() {
-        assert(resDao.add(guest));
+        assert(resDao.add(composite));
         System.out.println("testAdd PASSED");
     }
 

@@ -1,6 +1,8 @@
 package com.lodgereservation.model.persistence;
 
+import com.lodgereservation.model.domain.Composite;
 import com.lodgereservation.model.domain.LodgeGuest;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -12,8 +14,9 @@ import java.util.ArrayList;
  * @param <T>   a generic object type
  */
 public interface Dao<T> {
+
     ArrayList<LodgeGuest> getAll();
-    boolean add(T item);
+    boolean add(@NotNull T item);
     boolean update(T item);
     boolean delete(T item);
 }

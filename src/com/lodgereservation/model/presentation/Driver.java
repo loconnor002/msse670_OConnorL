@@ -14,22 +14,25 @@ import java.util.ArrayList;
 public class Driver {
     public static void main(String[] args) {
         boolean success;
+        Composite composite;
         LodgeGuest guest;
         ReservationDao database;
         ArrayList<LodgeGuest> guestList;
 
 
-        guest = new LodgeGuest("Zaphod", "Beeblebrox", "zaphod@prez.com", "17201111115");
-
+        guest = new LodgeGuest("Slarti", "Bartfast", "slarti@ilovefjords.com", "17201111116");
+        composite = new Composite();
+        composite.setGuest(guest);
         try {
             database = new ReservationDao();
-            success = database.add(guest);
-            guestList = database.getAll();
+            success = database.add(composite);
+            System.out.println("added " + guest.getFirstName() + " successfully: " + success);
 
+            /*guestList = database.getAll();
             System.out.println("READ database success: " + success + "\n Guests from DB:");
             for (LodgeGuest g : guestList) {
                 System.out.println(" " + g);
-            }
+            }*/
         } catch (Exception e) {
             System.err.println(e);
         }
