@@ -19,8 +19,8 @@ public class Driver {
         ReservationDao database;
         ArrayList<LodgeGuest> guestList;
 
-
         guest = new LodgeGuest("Slarti", "Bartfast", "slarti@ilovefjords.com", "17201111116");
+        System.out.println("valid guest: " + guest.validate());
         composite = new Composite();
         composite.setGuest(guest);
         try {
@@ -31,8 +31,14 @@ public class Driver {
 
             // Update database (add a guest)
             success = database.add(composite);
-            System.out.println("Update (add to) database success: " + success);
+            System.out.println("Update database success (insert a new LodgeGuest) : " + success);
 
+            guest.setPhone("19703333333");
+            composite.setGuest(guest);
+            success = database.update(composite);
+            System.out.println("Update database success (change LodgeGuest phone) : " + success);
+
+/*
             // Read from database
             guestList = database.getAll();
             System.out.println("Read database success: " + success + "\n Guests from DB:");
@@ -40,12 +46,12 @@ public class Driver {
                 System.out.println(" " + g);
             }
 
-            //todo update database
-
             // Delete from database
-            //success = database.delete(composite);
+            success = database.delete(composite);
             System.out.println("Delete from database success: " + success);
-
+*/
+        } catch (NullPointerException e) {
+            System.err.println(e);
         } catch (Exception e) {
             System.err.println(e);
         }

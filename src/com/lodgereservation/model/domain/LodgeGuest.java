@@ -25,8 +25,8 @@ public class LodgeGuest extends Person implements Serializable {
 
     public LodgeGuest(UUID id, String firstName, String lastName, String email, String phone) {
         super(firstName, lastName, email, phone);
+        assert validate() : "Invalid name, phone, or email";
         this.GUEST_ID = id;
-
     }
 
     /**
@@ -36,9 +36,10 @@ public class LodgeGuest extends Person implements Serializable {
      * @return true if parameters contain appropriate values, false otherwise
      */
     public boolean validate() {
-        return GUEST_ID != null && !firstName.isBlank()
-                && !lastName.isBlank() && !address.isBlank()
-                && email.contains("@");
+        return firstName.matches("[a-zA-Z'-]{1,30}$") &&
+                lastName.matches("[a-zA-Z'-]{1,30}$") &&
+                phone.matches("^[0-9]{11}$") &&
+                email.matches("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$");
     }
 
     @Override

@@ -18,15 +18,13 @@ class ReservationDaoTest {
 
     private Composite composite;
     private Connection connection;
-    private Statement statement;
     private ResultSet resultSet;
     private ArrayList<LodgeGuest> records;
     private ReservationDao resDao;
-    private LodgeGuest guest;
 
     @BeforeEach
     void setUp() {
-        guest = new LodgeGuest("Rob", "McKenna", "rain.god@lorries.com", "19701111116");
+        LodgeGuest guest = new LodgeGuest("Rob", "McKenna", "rain.god@lorries.com", "19701111116");
         composite = new Composite();
         composite.setGuest(guest);
         try {
@@ -34,7 +32,7 @@ class ReservationDaoTest {
                     "jdbc:mysql://localhost:3306/reservations",
                     "msse670",
                     "p@sswordMSSE670");
-            statement = connection.createStatement();
+            Statement statement = connection.createStatement();
             resultSet = statement.executeQuery("select * from guests");
             records = new ArrayList<>();
             resDao = new ReservationDao();
@@ -43,6 +41,7 @@ class ReservationDaoTest {
             System.err.println(e);
         }
     }
+
 
     @AfterEach
     void tearDown() {
@@ -55,6 +54,7 @@ class ReservationDaoTest {
             fail("SQLException");
         }
     }
+
 
     @Test
     void testGetAll() {
@@ -79,6 +79,7 @@ class ReservationDaoTest {
     @Test
     void testAdd() {
         assert(resDao.add(composite));
+        resDao.delete(composite);
         System.out.println("testAdd PASSED");
     }
 
@@ -90,6 +91,7 @@ class ReservationDaoTest {
         System.out.println("testAddInvalidName PASSED");
     }
 
+
     @Test
     void testAddInvalidEmail() {
         composite.setGuest(new LodgeGuest("okFN", "okLN", "valid#@Email@email.nope>", "19701111113"));
@@ -97,13 +99,23 @@ class ReservationDaoTest {
         System.out.println("testAddInvalidEmail PASSED");
     }
 
-    @Test
-    void update() {
-    }
 
     @Test
     void delete() {
         //assert(resDao.delete(composite));
         System.out.println("testDelete PASSED");
     }
+
+/*
+    @Test
+    void testUpdate() {
+        //driver works, but this throws "SQLException, illegal operation on empty result set"... why?
+        try {
+            assert (resDao.update(composite));
+            System.out.println("testUpdate PASSED");
+
+        } catch (Exception e) {
+            System.err.println(e);
+        }
+    }*/
 }

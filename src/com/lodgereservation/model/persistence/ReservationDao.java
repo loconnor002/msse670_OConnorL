@@ -48,8 +48,9 @@ public class ReservationDao implements Dao<Composite> {
     public ArrayList<LodgeGuest> getAll() {
         LodgeGuest guest;
         try {
+            // create new LodgeGuest from each database record, given column names
             while (resultSet.next()) {
-                guest = new LodgeGuest(UUID.fromString(resultSet.getString("uuid")),
+                guest = new LodgeGuest(UUID.fromString(resultSet.getString("uuid")),    //cast String value to UUID
                         resultSet.getString("firstname"),
                         resultSet.getString("lastname"),
                         resultSet.getString("email"),
@@ -57,7 +58,6 @@ public class ReservationDao implements Dao<Composite> {
                 guestList.add(guest);
             }
         } catch (SQLException e) {
-
             System.err.println("From ReservationDao.getAll()" + e);
         }
         return guestList;
@@ -74,7 +74,7 @@ public class ReservationDao implements Dao<Composite> {
     public boolean add(@NotNull Composite composite) {
 
         LodgeGuest guest = composite.getGuest();
-        boolean success = false;
+        int count = 0;
         PreparedStatement pstmt;
         String firstname, lastname, phone, email, query;
 
@@ -84,31 +84,59 @@ public class ReservationDao implements Dao<Composite> {
         email = guest.getEmail();
         phone = guest.getPhone();
 
+        //validate guest fields
         if (validateNames(firstname, lastname) && validateEmail(email) && validatePhone(phone)) {
-
             try {
-                //statement = connection.createStatement();   //todo difference between .createStatement() and .prepareStatement?
+                //insert guest into database
+                // use parameterized query instead of String query to guard against SQL injection (owasp.org)
                 pstmt = connection.prepareStatement(query);
                 pstmt.setString(1, guest.getID().toString());
                 pstmt.setString(2, firstname);
                 pstmt.setString(3, lastname);
                 pstmt.setString(4, email);
                 pstmt.setString(5, phone);
-                int count = pstmt.executeUpdate();
+                count = pstmt.executeUpdate();
 
-                success = count > 0;
             } catch (SQLException e) {
                 System.err.println("From ResDao.add() " + e);
             }
         }
-        return success;
+        return (count > 0);
     }
 
 
     @Override
-    public boolean update(Composite composite) {
-        return false;
-    }
+    public boolean update(@NotNull Composite composite) {
+        int count = 0;
+        LodgeGuest guest = composite.getGuest();
+
+        assert guest != null : "Null guest";
+        String guestID = guest.getID().toString();
+        String query = "select * from reservations.guests where uuid=?;";           //todo helper method, find records?
+        String query2;
+        PreparedStatement pstmt;
+
+        try {
+            pstmt = connection.prepareStatement(query);
+            pstmt.setString(1, guestID);
+            resultSet = pstmt.executeQuery();
+            resultSet.next();
+
+            //update changed phone number
+            if (!guest.getPhone().equals(resultSet.getString("phone"))) {
+                System.out.println(guest.getPhone() + " " + resultSet.getString("phone"));
+                query2 = "update reservations.guests set phone=? where uuid=?;";
+                pstmt = connection.prepareStatement(query2);
+                pstmt.setString(1, guest.getPhone());
+                pstmt.setString(2, guestID);
+                count = pstmt.executeUpdate();      //count number of records changed
+            }
+
+        } catch (SQLException e) {
+            System.err.println(e);
+        }
+        return (count > 0);
+    } //end update()
 
 
     /**
@@ -121,16 +149,18 @@ public class ReservationDao implements Dao<Composite> {
     public boolean delete(@NotNull Composite composite) {
         int count = 0;
         LodgeGuest guest = composite.getGuest();
-        String guestId = guest.getID().toString();
-        String query = "select * from reservations.guests where uuid=?;";
+        String guestID, query;
+
+        assert guest != null : "Guest is null";
+        guestID = guest.getID().toString();
+        query = "select * from reservations.guests where uuid=?;";
         PreparedStatement pstmt;
 
-        assert(guest != null);
         try {
             // if guest is not null, make sure guest exists in the database
-            // use parameterized query instead of String query to guard against SQL injection
+            // use parameterized query instead of String query to guard against SQL injection (owasp.org)
             pstmt = connection.prepareStatement(query);
-            pstmt.setString(1, guestId);
+            pstmt.setString(1, guestID);
 
             // attempt to find guest in the database
             resultSet = pstmt.executeQuery();
@@ -138,7 +168,7 @@ public class ReservationDao implements Dao<Composite> {
             // guest was found in the database, proceed to delete
             query = "delete from reservations.guests where uuid=?;";
             pstmt = connection.prepareStatement(query);
-            pstmt.setString(1, guestId);
+            pstmt.setString(1, guestID);
             count = pstmt.executeUpdate();                              // number of rows changed
         } catch (SQLException e) {
             System.err.println(e);
@@ -154,11 +184,15 @@ public class ReservationDao implements Dao<Composite> {
      * @return true if email conforms to regex pattern, false otherwise
      */
     private boolean validateEmail(String email) {
+        //better ways to validate email address:
+        //  . test by sending email and not using until valid reply received
+        //  . bigger, scarier regex than this:
         String emailRegex = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
                 + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
 
         return Pattern.compile(emailRegex).matcher(email).matches();
     }
+
 
     /**
      * Validate firstname and lastname.
@@ -168,7 +202,7 @@ public class ReservationDao implements Dao<Composite> {
      * @return          true if names are valid, false otherwise.
      */
     private boolean validateNames(@NotNull String firstname, @NotNull String lastname) {
-        String regex = "[a-zA-Z'-]+$";
+        String regex = "[a-zA-Z'-]{1,30}$";
         boolean validNames = false;
 
         try {
@@ -188,7 +222,7 @@ public class ReservationDao implements Dao<Composite> {
      * @return      true if the phone number is valid, false otherwise.
      */
     private boolean validatePhone(@NotNull String phone) {
-        String regex = "^[0-9\\-() ]+$";
+        String regex = "^[0-9\\-() ]{1,14}$";
         boolean validPhone = false;
 
         try {
