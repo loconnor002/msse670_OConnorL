@@ -24,15 +24,28 @@ public class Driver {
         composite = new Composite();
         composite.setGuest(guest);
         try {
+            // Create database
             database = new ReservationDao();
-            success = database.add(composite);
-            System.out.println("added " + guest.getFirstName() + " successfully: " + success);
+            success = database != null;
+            System.out.println("Create database success: " + success);
 
-            /*guestList = database.getAll();
-            System.out.println("READ database success: " + success + "\n Guests from DB:");
+            // Update database (add a guest)
+            success = database.add(composite);
+            System.out.println("Update (add to) database success: " + success);
+
+            // Read from database
+            guestList = database.getAll();
+            System.out.println("Read database success: " + success + "\n Guests from DB:");
             for (LodgeGuest g : guestList) {
                 System.out.println(" " + g);
-            }*/
+            }
+
+            //todo update database
+
+            // Delete from database
+            //success = database.delete(composite);
+            System.out.println("Delete from database success: " + success);
+
         } catch (Exception e) {
             System.err.println(e);
         }

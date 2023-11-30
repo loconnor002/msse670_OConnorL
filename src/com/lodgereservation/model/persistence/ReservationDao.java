@@ -63,11 +63,12 @@ public class ReservationDao implements Dao<Composite> {
         return guestList;
     }
 
+
     /**
      * Add a LodgeGuest object to the database with validation.
      *
-     * @param composite
-     * @return
+     * @param composite Composite object containing a LodgeGuest object
+     * @return          true if getAll successfully added a valid LodgeGuest to the database, false otherwise.
      */
     @Override
     public boolean add(@NotNull Composite composite) {
@@ -95,7 +96,6 @@ public class ReservationDao implements Dao<Composite> {
                 pstmt.setString(5, phone);
                 int count = pstmt.executeUpdate();
 
-                System.out.println("prepared statement: " + pstmt + "count: " + count);
                 success = count > 0;
             } catch (SQLException e) {
                 System.err.println("From ResDao.add() " + e);
@@ -104,15 +104,47 @@ public class ReservationDao implements Dao<Composite> {
         return success;
     }
 
+
     @Override
     public boolean update(Composite composite) {
         return false;
     }
 
+
+    /**
+     * Delete a specified record from the database.
+     *
+     * @param composite Composite object containing a LodgeGuest
+     * @return          true if delete removed the specified LodgeGuest from the database, false otherwise
+     */
     @Override
-    public boolean delete(Composite composite) {
-        return false;
-    }
+    public boolean delete(@NotNull Composite composite) {
+        int count = 0;
+        LodgeGuest guest = composite.getGuest();
+        String guestId = guest.getID().toString();
+        String query = "select * from reservations.guests where uuid=?;";
+        PreparedStatement pstmt;
+
+        assert(guest != null);
+        try {
+            // if guest is not null, make sure guest exists in the database
+            // use parameterized query instead of String query to guard against SQL injection
+            pstmt = connection.prepareStatement(query);
+            pstmt.setString(1, guestId);
+
+            // attempt to find guest in the database
+            resultSet = pstmt.executeQuery();
+
+            // guest was found in the database, proceed to delete
+            query = "delete from reservations.guests where uuid=?;";
+            pstmt = connection.prepareStatement(query);
+            pstmt.setString(1, guestId);
+            count = pstmt.executeUpdate();                              // number of rows changed
+        } catch (SQLException e) {
+            System.err.println(e);
+        }
+        return (count > 0);
+    } //end delete()
 
 
     /**
@@ -122,14 +154,10 @@ public class ReservationDao implements Dao<Composite> {
      * @return true if email conforms to regex pattern, false otherwise
      */
     private boolean validateEmail(String email) {
-        boolean valid;
         String emailRegex = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
                 + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
 
-        valid = Pattern.compile(emailRegex).matcher(email).matches();
-        System.out.println("valid email: " + email + " " + valid);
-
-        return valid;
+        return Pattern.compile(emailRegex).matcher(email).matches();
     }
 
     /**
@@ -145,7 +173,6 @@ public class ReservationDao implements Dao<Composite> {
 
         try {
             validNames = firstname.matches(regex) && lastname.matches(regex);
-            System.out.println("valid names: " + firstname + " " + lastname + " " + validNames);
 
         } catch (PatternSyntaxException e) {
             System.err.println(e);
@@ -166,8 +193,6 @@ public class ReservationDao implements Dao<Composite> {
 
         try {
             validPhone = phone.matches(regex);
-            System.out.println("valid phone: " + phone + " " + validPhone);
-
 
         } catch (PatternSyntaxException e) {
             System.err.println(e);

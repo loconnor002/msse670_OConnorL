@@ -26,7 +26,7 @@ class ReservationDaoTest {
 
     @BeforeEach
     void setUp() {
-        guest = new LodgeGuest("TestFN", "TestLN", "TestEM@email.com", "19701111111");
+        guest = new LodgeGuest("Rob", "McKenna", "rain.god@lorries.com", "19701111116");
         composite = new Composite();
         composite.setGuest(guest);
         try {
@@ -49,7 +49,7 @@ class ReservationDaoTest {
         try {
             connection.close();
             assert(connection.isClosed());
-            System.out.println("tear down complete, connection closed");
+            //System.out.println("tear down complete, connection closed");
         } catch (SQLException e) {
             System.err.println("Error closing connection " + e);
             fail("SQLException");
@@ -58,20 +58,16 @@ class ReservationDaoTest {
 
     @Test
     void testGetAll() {
-        int size = 0;
-        int numResults = 0;
+        int ctr = 0;
+
         try {
             records = resDao.getAll();
-            /*
-            while(resultSet.next()) {
-                records.add(new LodgeGuest());
+            assert(resultSet != null);
+            while (resultSet.next()) {
+                //size = resultSet.getRow();
                 ctr++;
             }
-
-            statement.executeQuery("select count(uuid) as numResults from guests");
-            System.out.println(numResults);*/
-            size = records.size();
-            assert(size != 0);
+            assert(resDao != null && records.size() == ctr);
             System.out.println("testGetAll PASSED");
 
         } catch (Exception e) {
@@ -79,10 +75,26 @@ class ReservationDaoTest {
         }
     }
 
+
     @Test
     void testAdd() {
         assert(resDao.add(composite));
         System.out.println("testAdd PASSED");
+    }
+
+
+    @Test
+    void testAddInvalidName() {
+        composite.setGuest(new LodgeGuest("invalid$FN", "invalidLN_", "validEM@email.com", "19701111112"));
+        assert(!resDao.add(composite));
+        System.out.println("testAddInvalidName PASSED");
+    }
+
+    @Test
+    void testAddInvalidEmail() {
+        composite.setGuest(new LodgeGuest("okFN", "okLN", "valid#@Email@email.nope>", "19701111113"));
+        assert(!resDao.add(composite));
+        System.out.println("testAddInvalidEmail PASSED");
     }
 
     @Test
@@ -91,5 +103,7 @@ class ReservationDaoTest {
 
     @Test
     void delete() {
+        //assert(resDao.delete(composite));
+        System.out.println("testDelete PASSED");
     }
 }
