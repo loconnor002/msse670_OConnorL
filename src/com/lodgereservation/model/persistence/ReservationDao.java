@@ -14,6 +14,7 @@ import java.util.regex.PatternSyntaxException;
  * Description: This class acts as a Data Access Object interface between
  *          the LodgeReservationApplication and its underlying MySQL database.
  *          It provides read/write/update functions.
+ *          Future reference: <a href="https://docs.oracle.com/cd/E17952_01/mysql-8.0-en/index.html">...</a>
  *
  * @author lauren.oconnor
  */
@@ -75,9 +76,9 @@ public class ReservationDao implements Dao<Composite> {
 
         LodgeGuest guest = composite.getGuest();
         int count = 0;
-        PreparedStatement pstmt;
+        PreparedStatement preppedStatement;
         String firstname, lastname, phone, email, query;
-        ResultSet resultSet2;
+        ResultSet resultSetAdd;
 
         query = "insert into reservations.guests (uuid, firstname, lastname, email, phone) values (?, ?, ?, ?, ?);";
         firstname = guest.getFirstName();
@@ -88,17 +89,17 @@ public class ReservationDao implements Dao<Composite> {
         //validate guest fields
         if (validateNames(firstname, lastname) && validateEmail(email) && validatePhone(phone)) {
             try {
-                resultSet2 = search(composite);  //empty if no duplicates found
-                if (!resultSet2.next()) {
+                resultSetAdd = search(composite);  //empty if no duplicates found
+                if (!resultSetAdd.next()) {
                     //insert guest into database
                     // use parameterized query instead of String query to guard against SQL injection (owasp.org)
-                    pstmt = connection.prepareStatement(query);
-                    pstmt.setString(1, guest.getID().toString());
-                    pstmt.setString(2, firstname);
-                    pstmt.setString(3, lastname);
-                    pstmt.setString(4, email);
-                    pstmt.setString(5, phone);
-                    count = pstmt.executeUpdate();
+                    preppedStatement = connection.prepareStatement(query);
+                    preppedStatement.setString(1, guest.getID().toString());
+                    preppedStatement.setString(2, firstname);
+                    preppedStatement.setString(3, lastname);
+                    preppedStatement.setString(4, email);
+                    preppedStatement.setString(5, phone);
+                    count = preppedStatement.executeUpdate();
                 }
             } catch (SQLException e) {
                 System.err.println("From ResDao.add() " + e);
@@ -107,29 +108,34 @@ public class ReservationDao implements Dao<Composite> {
         return (count > 0);
     }
 
-
+    /**
+     * Update the phone number.
+     *
+     * @param composite Composite object containing the LodgeGuest whose new phone number
+     *                  now differs from their phone number stored in the database.
+     * @return          true if phone was updated successfully, false otherwise.
+     */
     @Override
-    public boolean update(@NotNull Composite composite) {
+    public boolean updatePhone(@NotNull Composite composite) {
         int count = 0;
         LodgeGuest guest = composite.getGuest();
         ResultSet resultSet5;
         assert guest != null : "Null guest";
         String guestID = guest.getID().toString();
         String query2;
-        PreparedStatement pstmt;
+        PreparedStatement preppedStatement;
 
         try {
-            resultSet5 = search(composite);//pstmt.executeQuery();
+            resultSet5 = search(composite);//preppedStatement.executeQuery();
             resultSet5.next();
 
             //update changed phone number if it is not the same as the existing number
             if (!guest.getPhone().equals(resultSet5.getString("phone"))) {
-                //System.out.println(guest.getPhone() + " " + resultSet5.getString("phone"));
                 query2 = "update reservations.guests set phone=? where uuid=?;";
-                pstmt = connection.prepareStatement(query2);
-                pstmt.setString(1, guest.getPhone());
-                pstmt.setString(2, guestID);
-                count = pstmt.executeUpdate();      //count number of records changed
+                preppedStatement = connection.prepareStatement(query2);
+                preppedStatement.setString(1, guest.getPhone());
+                preppedStatement.setString(2, guestID);
+                count = preppedStatement.executeUpdate();      //count number of records changed
             }
 
         } catch (SQLException e) {
@@ -154,13 +160,13 @@ public class ReservationDao implements Dao<Composite> {
         assert guest != null : "Guest is null";
         guestID = guest.getID().toString();
         PreparedStatement pstmt;
-        ResultSet resultSet3;
+        ResultSet resultSetDelete;
 
         try {
             // if guest is not null, make sure guest exists in the database
-            resultSet3 = search(composite);
+            resultSetDelete = search(composite);
 
-            if (resultSet3.next()) {
+            if (resultSetDelete.next()) {
                 // guest was found in the database, proceed to delete
                 query = "delete from reservations.guests where uuid=?;";
                 pstmt = connection.prepareStatement(query);
@@ -176,6 +182,11 @@ public class ReservationDao implements Dao<Composite> {
     } //end delete()
 
 
+    public boolean login(Composite composite) {
+        //todo how to connect with LoginService?
+        System.out.println("login stub from ReservationDao");
+        return false;
+    }
     /**
      * Validate an email address.
      *
@@ -241,16 +252,16 @@ public class ReservationDao implements Dao<Composite> {
      * @return              a ResultSet containing the Lodge guest, if found, otherwise an empty ResultSet
      */
     private ResultSet search(@NotNull Composite composite) {
-        ResultSet resultSet4 = null;
+        ResultSet resultSetSearch = null;
         PreparedStatement pstmt;
         String query = "select * from reservations.guests where uuid=?;";
         try {
             pstmt = connection.prepareStatement(query);
             pstmt.setString(1, composite.getGuest().getID().toString());
-            resultSet4 = pstmt.executeQuery();
+            resultSetSearch = pstmt.executeQuery();
         } catch (SQLException e) {
             System.err.println(e);
         }
-        return resultSet4;
+        return resultSetSearch;
     }
 }

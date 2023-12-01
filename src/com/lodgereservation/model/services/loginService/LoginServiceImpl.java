@@ -18,7 +18,7 @@ public class LoginServiceImpl implements ILoginService {
     }
 
     /**
-     * Locate a user in the (fake) database.
+     * Locate a user in the database.
      *
      * @param composite a domain object
      * @return          true if the user was found in the system, false otherwise

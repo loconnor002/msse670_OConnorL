@@ -10,6 +10,7 @@ import com.lodgereservation.model.services.inventory.IInventoryService;
 import com.lodgereservation.model.services.loginService.ILoginService;
 import com.lodgereservation.model.services.reservationService.IReservationService;
 
+//todo javadoc
 public class LodgeReservationManager extends ManagerSuperType {
 
     //todo - why static?
@@ -18,7 +19,6 @@ public class LodgeReservationManager extends ManagerSuperType {
 
     private LodgeReservationManager() {
         //keep constructor private to prevent instantiation by outside callers
-        //todo implement?
     }
 
     /**
@@ -56,6 +56,12 @@ public class LodgeReservationManager extends ManagerSuperType {
         return action;
     }
 
+    /**
+     * Update the Room in a Reservation.
+     *
+     * @param composite Composite object containing a Room and a Reservation.
+     * @return          true if the update was successful, false otherwise.
+     */
     private boolean updateReservationRoom(Composite composite) {
         boolean isUpdated = false;
         ServiceFactory sf = ServiceFactory.getInstance();
@@ -100,6 +106,12 @@ public class LodgeReservationManager extends ManagerSuperType {
         return isBooked;
     }
 
+    /**
+     * Cancel a reservation.
+     *
+     * @param composite Composite object containing a Reservation domain object.
+     * @return          true if cancellation was successful, false otherwise.
+     */
     private boolean cancelReservation(Composite composite) {
         boolean isCancelled = false;
         ServiceFactory sf = ServiceFactory.getInstance();

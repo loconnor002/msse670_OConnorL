@@ -2,6 +2,11 @@ package com.lodgereservation.model.domain;
 
 import java.io.Serializable;
 
+/**
+ * Superclass to LodgeGuest and Employee.
+ *
+ * @author lauren.oconnor
+ */
 public class Person implements Serializable {
 
     protected String email;
@@ -47,6 +52,19 @@ public class Person implements Serializable {
         this.password = "default password";
     }
 
+    /**
+     * Validate parameter values, check if guest ID is not null,
+     * email contains an '@' character, and names are not blank.
+     *
+     * @return true if parameters contain appropriate values, false otherwise
+     */
+    public boolean validate() {
+        return firstName.matches("[a-zA-Z'-]{1,30}$") &&
+                lastName.matches("[a-zA-Z'-]{1,30}$") &&
+                phone.matches("^[0-9]{11}$") &&
+                email.matches("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$");
+    }
+
     public String getAddress() {
         return address;
     }
@@ -88,5 +106,6 @@ public class Person implements Serializable {
     }
 
     public String getPassword() { return this.password; }
+
     public void setPassword(String pswd) {this.password = pswd;}
 }

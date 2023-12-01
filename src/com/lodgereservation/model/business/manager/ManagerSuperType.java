@@ -4,6 +4,7 @@ import com.lodgereservation.model.business.exception.PropertyFileNotFoundExcepti
 import com.lodgereservation.model.domain.Composite;
 import com.lodgereservation.model.services.manager.PropertyManager;
 
+//todo javadoc
 public abstract class ManagerSuperType {
 
     // static initializer block, executes if ManagerSuperType is extended/referenced

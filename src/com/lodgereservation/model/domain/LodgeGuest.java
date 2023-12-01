@@ -29,19 +29,12 @@ public class LodgeGuest extends Person implements Serializable {
         this.GUEST_ID = id;
     }
 
-    /**
-     * Validate parameter values, check if guest ID is not null,
-     * email contains an '@' character, and names are not blank.
-     *
-     * @return true if parameters contain appropriate values, false otherwise
-     */
-    public boolean validate() {
-        return firstName.matches("[a-zA-Z'-]{1,30}$") &&
-                lastName.matches("[a-zA-Z'-]{1,30}$") &&
-                phone.matches("^[0-9]{11}$") &&
-                email.matches("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$");
-    }
 
+    /**
+     * Represent this LodgeGuest object as a String.
+     *
+     * @return  String containing the attributes of this LodgeGuest object.
+     */
     @Override
     public String toString() {
         return "LodgeGuest{Guest ID=" + GUEST_ID +
@@ -52,9 +45,10 @@ public class LodgeGuest extends Person implements Serializable {
                 ", Email=" + email + "}";
     }
 
+
     /**
      * Compare two objects, for use with this.hashCode() and hash-based collections
-     * <a href="https://www.geeksforgeeks.org/override-equalsobject-hashcode-method/">...</a>
+     * <a href="https://www.geeksforgeeks.org/override-equalsobject-hashcode-method/">Future Reference</a>
      *
      * @see #hashCode()
      * @param   obj an object to compare to this LodgeGuest
@@ -70,12 +64,18 @@ public class LodgeGuest extends Person implements Serializable {
             result = false;
         } else {
             LodgeGuest lg = (LodgeGuest) obj;
-            result = (lg.getFirstName().equals(firstName) &&
-                    lg.getLastName().equals(lastName));
+            result = (lg.getID().toString().equals(GUEST_ID.toString()));
         }
         return result;
     }
 
+
+    /**
+     * Generate a hash code for this object's UUID.
+     * <a href="https://www.geeksforgeeks.org/override-equalsobject-hashcode-method/">Future Reference</a>
+     *
+     * @return  integer hash code
+     */
     @Override
     public int hashCode() {
         return Objects.hash(GUEST_ID);

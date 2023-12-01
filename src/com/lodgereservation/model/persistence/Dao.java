@@ -1,6 +1,5 @@
 package com.lodgereservation.model.persistence;
 
-import com.lodgereservation.model.domain.Composite;
 import com.lodgereservation.model.domain.LodgeGuest;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,6 +16,6 @@ public interface Dao<T> {
 
     ArrayList<LodgeGuest> getAll();
     boolean add(@NotNull T item);
-    boolean update(T item);
+    boolean updatePhone(T item);
     boolean delete(T item);
 }

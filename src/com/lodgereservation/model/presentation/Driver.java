@@ -1,41 +1,29 @@
 package com.lodgereservation.model.presentation;
 
-import com.lodgereservation.model.business.manager.LodgeReservationManager;
 import com.lodgereservation.model.domain.*;
 import com.lodgereservation.model.persistence.ReservationDao;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class Driver {
     public static void main(String[] args) {
         boolean success;
+        int ctr = 1;
         Composite composite;
         LodgeGuest guest;
         ReservationDao database;
         ArrayList<LodgeGuest> guestList;
 
-        guest = new LodgeGuest("Slarti", "Bartfast", "slarti@ilovefjords.com", "17201111116");
-        System.out.println("valid guest: " + guest.validate());
+        guest = new LodgeGuest("Arthur", "Dent", "earth.man@h2g2.com", "17201111110");
         composite = new Composite();
         composite.setGuest(guest);
+
         try {
             // Create database
             database = new ReservationDao();
             success = database != null;
             System.out.println("Create database connection: success=" + success);
-
-            // Read from database
-            guestList = database.getAll();
-            success = !guestList.isEmpty();
-            System.out.println("Read database: success=" + success + "\n Guests from DB:");
-            for (LodgeGuest g : guestList) {
-                System.out.println(" " + g);
-            }
 
             // Update database (add a guest)
             success = database.add(composite);
@@ -43,12 +31,30 @@ public class Driver {
 
             guest.setPhone("19703333333");
             composite.setGuest(guest);
-            success = database.update(composite);
+            success = database.updatePhone(composite);
             System.out.println("Update database (change LodgeGuest phone): success=" + success);
 
+            // Read from database
+            guestList = database.getAll();
+            success = !guestList.isEmpty();
+            System.out.println("Read database: success=" + success + "\n Guests from DB:");
+            for (LodgeGuest g : guestList) {
+                System.out.println(ctr + " " + g);
+                ctr++;
+            }
+
+            guestList = database.getAll();
+            success = !guestList.isEmpty();
+
+            System.out.println("\n\nRead database: success=" + success + "\n Guests from DB:");
+            ctr = 1;
+            for (LodgeGuest g : guestList) {
+                System.out.println(ctr + " " + g);
+                ctr++;
+            }
             // Delete from database
-            success = database.delete(composite);
-            System.out.println("Delete from database: success=" + success);
+            //success = database.delete(composite);
+            //System.out.println("Delete from database: success=" + success);
 
         } catch (NullPointerException e) {
             System.err.println(e);
