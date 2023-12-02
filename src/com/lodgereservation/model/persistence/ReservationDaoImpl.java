@@ -11,20 +11,20 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 /**
- * Description: This class acts as a Data Access Object interface between
- *          the LodgeReservationApplication and its underlying MySQL database.
+ * Description: This class provides an interface (Data Access Object) between
+ *          the LodgeReservation application and its underlying MySQL database.
  *          It provides read/write/update functions.
- *          Future reference: <a href="https://docs.oracle.com/cd/E17952_01/mysql-8.0-en/index.html">...</a>
+ *          <a href="https://docs.oracle.com/cd/E17952_01/mysql-8.0-en/index.html">Future reference, MySQL</a>
  *
  * @author lauren.oconnor
  */
-public class ReservationDao implements Dao<Composite> {
+public class ReservationDaoImpl implements IDao<Composite> {
 
     private ArrayList<LodgeGuest> guestList;
     private Connection connection;
     private ResultSet resultSet;
 
-    public ReservationDao() {
+    public ReservationDaoImpl() {
         this.guestList = new ArrayList<>();
         try {
             connection = DriverManager.getConnection(
@@ -100,6 +100,7 @@ public class ReservationDao implements Dao<Composite> {
                     preppedStatement.setString(4, email);
                     preppedStatement.setString(5, phone);
                     count = preppedStatement.executeUpdate();
+
                 }
             } catch (SQLException e) {
                 System.err.println("From ResDao.add() " + e);
@@ -136,6 +137,7 @@ public class ReservationDao implements Dao<Composite> {
                 preppedStatement.setString(1, guest.getPhone());
                 preppedStatement.setString(2, guestID);
                 count = preppedStatement.executeUpdate();      //count number of records changed
+                composite.addUpdate("updated phone to " + guest.getPhone());
             }
 
         } catch (SQLException e) {
@@ -182,11 +184,6 @@ public class ReservationDao implements Dao<Composite> {
     } //end delete()
 
 
-    public boolean login(Composite composite) {
-        //todo how to connect with LoginService?
-        System.out.println("login stub from ReservationDao");
-        return false;
-    }
     /**
      * Validate an email address.
      *

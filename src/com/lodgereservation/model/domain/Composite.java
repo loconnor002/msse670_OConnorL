@@ -26,6 +26,7 @@ public class Composite implements Serializable {
         room = new Room();
         newRoom = new Room(-999);
         updates = new HashMap<>();
+        this.addUpdate("Composite created\n");
     }
 
     public Composite(LodgeGuest guest, Reservation res, Room room, Lodge lodge) {
@@ -35,6 +36,7 @@ public class Composite implements Serializable {
         this.room = room;
         newRoom = new Room(-999);
         updates = new HashMap<>();
+        this.addUpdate("\nComposite created");
     }
 
     public Composite(LodgeGuest guest, Reservation res, Room room, Room newRoom, Lodge lodge) {
@@ -44,6 +46,7 @@ public class Composite implements Serializable {
         this.room = room;
         this.newRoom = newRoom;
         updates = new HashMap<>();
+        this.addUpdate("\nComposite created");
     }
 
     public Composite(LodgeGuest guest, Lodge lodge) {
@@ -53,6 +56,8 @@ public class Composite implements Serializable {
         this.room = new Room();
         this.newRoom = new Room(-999);
         updates = new HashMap<>();
+        this.addUpdate("Composite created\n");
+
     }
 
     public Composite(LodgeGuest guest, Reservation res, Lodge lodge) {
@@ -62,16 +67,16 @@ public class Composite implements Serializable {
         this.room = new Room();
         newRoom = new Room(-999);
         updates = new HashMap<>();
+        this.addUpdate("Composite created\n");
     }
 
     /**
      * Log updates to this ReservationComposite object.
      *
-     * @param dt        date and time of update
      * @param comment   description of update
      */
-    public void addUpdate(LocalDateTime dt, String comment) {
-        updates.put(dt, comment);
+    public void addUpdate(String comment) {
+        updates.put(LocalDateTime.now(), comment);
     }
 
     @Override
@@ -89,6 +94,7 @@ public class Composite implements Serializable {
 
     public void setGuest(LodgeGuest guest) {
         this.guest = guest;
+        this.addUpdate("Added guest: " + guest + "\n");
     }
 
     public Reservation getReservation() {
@@ -97,6 +103,7 @@ public class Composite implements Serializable {
 
     public void setReservation(Reservation reservation) {
         this.reservation = reservation;
+        this.addUpdate("Added reservation: " + reservation + "\n");
     }
 
     public Room getRoom() {
@@ -115,6 +122,7 @@ public class Composite implements Serializable {
 
     public void setUpdates(HashMap<LocalDateTime, String> updates) {
         this.updates = updates;
+        this.addUpdate("set updates\n");
     }
 
     public Lodge getLodge() {
@@ -123,5 +131,6 @@ public class Composite implements Serializable {
 
     public void setLodge(Lodge lodge) {
         this.lodge = lodge;
+        this.addUpdate("Set lodge: " + lodge + "\n");
     }
 }

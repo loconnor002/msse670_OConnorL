@@ -9,6 +9,7 @@ import com.lodgereservation.model.services.factory.ServiceFactory;
 import com.lodgereservation.model.services.inventory.IInventoryService;
 import com.lodgereservation.model.services.loginService.ILoginService;
 import com.lodgereservation.model.services.reservationService.IReservationService;
+import org.jetbrains.annotations.NotNull;
 
 //todo javadoc
 public class LodgeReservationManager extends ManagerSuperType {
@@ -20,6 +21,7 @@ public class LodgeReservationManager extends ManagerSuperType {
     private LodgeReservationManager() {
         //keep constructor private to prevent instantiation by outside callers
     }
+
 
     /**
      * Ensure that only one LodgeReservationManager gets created.
@@ -34,6 +36,7 @@ public class LodgeReservationManager extends ManagerSuperType {
         return myInstance;
     }
 
+
     /**
      * Facade design pattern, allow all clients of the LodgeReservationManager class
      * to perform certain named actions.
@@ -42,7 +45,7 @@ public class LodgeReservationManager extends ManagerSuperType {
      * @param composite     holds application-specific domain state
      * @return action       true if the action was successful, false otherwise
      */
-    public boolean performAction(String commandString, Composite composite) {
+    public boolean performAction(@NotNull String commandString, Composite composite) {
         boolean action = false;
         switch (commandString) {
             case "RESERVE_ROOM" -> action = bookReservation(composite);
@@ -55,6 +58,7 @@ public class LodgeReservationManager extends ManagerSuperType {
         }
         return action;
     }
+
 
     /**
      * Update the Room in a Reservation.
@@ -106,6 +110,7 @@ public class LodgeReservationManager extends ManagerSuperType {
         return isBooked;
     }
 
+
     /**
      * Cancel a reservation.
      *
@@ -128,6 +133,7 @@ public class LodgeReservationManager extends ManagerSuperType {
         }
         return isCancelled;
     }
+
 
     /**
      * Log in a lodge guest.
@@ -181,6 +187,4 @@ public class LodgeReservationManager extends ManagerSuperType {
         }
         return isChecked;
     }
-
-
 }

@@ -2,25 +2,22 @@ package com.lodgereservation.model.persistence;
 
 import com.lodgereservation.model.domain.Composite;
 import com.lodgereservation.model.domain.LodgeGuest;
-import com.lodgereservation.model.domain.Reservation;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.management.monitor.GaugeMonitor;
-import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ReservationDaoTest {
+class ReservationDaoImplTest {
 
     private Composite composite;
     private Connection connection;
     private ResultSet resultSet;
     private ArrayList<LodgeGuest> records;
-    private ReservationDao resDao;
+    private ReservationDaoImpl resDao;
 
     @BeforeEach
     void setUp() {
@@ -35,7 +32,7 @@ class ReservationDaoTest {
             Statement statement = connection.createStatement();
             resultSet = statement.executeQuery("select * from guests");
             records = new ArrayList<>();
-            resDao = new ReservationDao();
+            resDao = new ReservationDaoImpl();
 
         } catch (SQLException e) {
             System.err.println(e);

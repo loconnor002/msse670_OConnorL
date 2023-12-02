@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * @author      lauren.oconnor
  * @param <T>   a generic object type
  */
-public interface Dao<T> {
+public interface IDao<T> {
 
     ArrayList<LodgeGuest> getAll();
     boolean add(@NotNull T item);
