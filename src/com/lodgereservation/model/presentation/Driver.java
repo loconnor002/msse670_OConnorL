@@ -50,7 +50,8 @@ public class Driver {
             //Delete from database
             //success = database.delete(composite);
             System.out.println("Delete from database: success=" + success);
-
+            success = database.closeDB();
+            System.out.println("database connection closed: " + success);
         } catch (Exception e) {
             System.err.println(e);
         }

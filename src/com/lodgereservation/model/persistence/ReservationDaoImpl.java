@@ -261,4 +261,15 @@ public class ReservationDaoImpl implements IDao<Composite> {
         }
         return resultSetSearch;
     }
+
+    public boolean closeDB() {
+        boolean success = false;
+        try {
+            connection.close();
+            success = connection.isClosed();
+        } catch (SQLException e) {
+            System.err.println(e);
+        }
+        return success;
+    }
 }
