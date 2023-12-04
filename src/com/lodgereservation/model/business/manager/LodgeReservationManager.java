@@ -11,6 +11,8 @@ import com.lodgereservation.model.services.loginService.ILoginService;
 import com.lodgereservation.model.services.reservationService.IReservationService;
 import org.jetbrains.annotations.NotNull;
 
+import java.sql.SQLException;
+
 //todo javadoc
 public class LodgeReservationManager extends ManagerSuperType {
 
@@ -45,7 +47,8 @@ public class LodgeReservationManager extends ManagerSuperType {
      * @param composite     holds application-specific domain state
      * @return action       true if the action was successful, false otherwise
      */
-    public boolean performAction(@NotNull String commandString, Composite composite) {
+    public boolean performAction(@NotNull String commandString, Composite composite)
+            throws ServiceLoadException, ReservationException, LoginException, InventoryException, SQLException {
         boolean action = false;
         switch (commandString) {
             case "RESERVE_ROOM" -> action = bookReservation(composite);
@@ -73,7 +76,7 @@ public class LodgeReservationManager extends ManagerSuperType {
 
         try {
             reservationService = (IReservationService) sf.getService(IReservationService.NAME);
-            isUpdated = reservationService.updateReservationRoom(composite.getLodge(), composite.getReservation(), composite.getNewRoom());
+            isUpdated = reservationService.updateReservationRoom(composite);
         } catch(ServiceLoadException sle) {
             System.err.println("ServiceLoadException from LodgeReservationManager: " + sle.getMessage());
         } catch (ReservationException re) {
@@ -90,7 +93,7 @@ public class LodgeReservationManager extends ManagerSuperType {
      * @return true if the reservation was successful, false otherwise
      * @see "LodgeReservationManager.performAction(String, Composite)"
      */
-    private boolean bookReservation(Composite composite) {
+    private boolean bookReservation(Composite composite) throws ServiceLoadException, ReservationException {
 
         boolean isBooked = false;
         ServiceFactory sf = ServiceFactory.getInstance();
@@ -104,8 +107,10 @@ public class LodgeReservationManager extends ManagerSuperType {
 
         } catch (ServiceLoadException sle) {
             System.err.println("ServiceLoadException from LodgeReservationManager: " + sle.getMessage());
+            throw new ServiceLoadException("cannot load reservation service", sle);
         } catch (ReservationException re) {
             System.err.println("ReservationException from LodgeReservationManager: " + re.getMessage());
+            throw new ReservationException("Reservation exception from LodgeReservationManager: " + re);
         }
         return isBooked;
     }
@@ -117,7 +122,7 @@ public class LodgeReservationManager extends ManagerSuperType {
      * @param composite Composite object containing a Reservation domain object.
      * @return          true if cancellation was successful, false otherwise.
      */
-    private boolean cancelReservation(Composite composite) {
+    private boolean cancelReservation(Composite composite) throws ServiceLoadException, ReservationException {
         boolean isCancelled = false;
         ServiceFactory sf = ServiceFactory.getInstance();
         IReservationService reservationService;
@@ -125,11 +130,13 @@ public class LodgeReservationManager extends ManagerSuperType {
         try {
             reservationService = (IReservationService) sf.getService(IReservationService.NAME);
             isCancelled = reservationService.cancelReservation(composite);
+
         } catch (ServiceLoadException sle) {
             System.err.println("ServiceLoadException from LodgeReservationManager: " + sle.getMessage());
-        } catch (ReservationException e) {
-            System.err.println("ReservationException from LodgeReservationManager: " + e.getMessage());
-            //throw new RuntimeException(e);
+            throw new ReservationException("ServiceLoadException from LodgeReservationManager: " + sle);
+        } catch (ReservationException re) {
+            System.err.println("ReservationException from LodgeReservationManager: " + re.getMessage());
+            throw new ReservationException("ReservationException from LodgeReservationManager: ", re);
         }
         return isCancelled;
     }
@@ -142,7 +149,8 @@ public class LodgeReservationManager extends ManagerSuperType {
      * @return true if the reservation was successful, false otherwise
      * @see "LodgeReservationManager.performAction(String, Composite)"
      */
-    private boolean loginLodgeGuest(Composite composite) {
+    private boolean loginLodgeGuest(Composite composite)
+            throws ServiceLoadException, LoginException, SQLException {
         boolean isLoggedIn = false;
 
         ServiceFactory sf = ServiceFactory.getInstance();
@@ -154,22 +162,24 @@ public class LodgeReservationManager extends ManagerSuperType {
 
         } catch (ServiceLoadException sle) {
             System.err.println("ERROR: LodgeReservationManager:: failed to load Login Service " + sle.getMessage());
+            throw new ServiceLoadException("ERROR: LodgeReservationManager:: failed to load Login Service ", sle);
 
         } catch (LoginException e) {
             System.err.println("ERROR: LodgeReservationManager:: login failed " + e.getMessage());
+            throw new LoginException("ERROR: LodgeReservationManager:: login failed ", e);
         }
         return isLoggedIn;
     }
 
 
     /**
-     * Log in a lodge guest.
+     * Check room inventory
      *
      * @param composite the application-specific domain state
-     * @return true if the reservation was successful, false otherwise
-     * @see "LodgeReservationManager.performAction(String, Composite)"
+     * @return          true if the reservation was successful, false otherwise
+     * @see             "LodgeReservationManager.performAction(String, Composite)"
      */
-    private boolean checkInventory(Composite composite) {
+    private boolean checkInventory(Composite composite) throws ServiceLoadException, InventoryException {
         boolean isChecked = false;
 
         ServiceFactory sf = ServiceFactory.getInstance();
@@ -177,13 +187,15 @@ public class LodgeReservationManager extends ManagerSuperType {
 
         try {
             iInventoryService = (IInventoryService) sf.getService(IInventoryService.NAME);
-            isChecked = iInventoryService.displayAvailableRooms(composite);
+            isChecked = iInventoryService.displayRooms(composite);
 
         } catch (ServiceLoadException sle) {
             System.err.println("ERROR: LodgeReservationManager:: failed to load Inventory Service" + sle.getMessage());
+            throw new ServiceLoadException("ERROR: LodgeReservationManager:: failed to load Inventory Service", sle);
         }
         catch (InventoryException ie) {
-            System.err.println("ERROR: LodgeReservationManager:: failed to load Reservation Service" + ie.getMessage());
+            System.err.println("ERROR: LodgeReservationManager:: Inventory Exception" + ie.getMessage());
+            throw new InventoryException("ERROR: LodgeReservationManager:: ", ie);
         }
         return isChecked;
     }

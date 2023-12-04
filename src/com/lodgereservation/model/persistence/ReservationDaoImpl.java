@@ -48,14 +48,19 @@ public class ReservationDaoImpl implements IDao<Composite> {
     @Override
     public ArrayList<LodgeGuest> getAll() {
         LodgeGuest guest;
+        Statement statement2;
+        ResultSet resultSetGetAll;
         try {
+            statement2 = connection.createStatement();
+            resultSetGetAll = statement2.executeQuery("select * from guests");
+
             // create new LodgeGuest from each database record, given column names
-            while (resultSet.next()) {
-                guest = new LodgeGuest(UUID.fromString(resultSet.getString("uuid")),    //cast String value to UUID
-                        resultSet.getString("firstname"),
-                        resultSet.getString("lastname"),
-                        resultSet.getString("email"),
-                        resultSet.getString("phone"));
+            while (resultSetGetAll.next()) {
+                guest = new LodgeGuest(UUID.fromString(resultSetGetAll.getString("uuid")),    //cast String value to UUID
+                        resultSetGetAll.getString("firstname"),
+                        resultSetGetAll.getString("lastname"),
+                        resultSetGetAll.getString("email"),
+                        resultSetGetAll.getString("phone"));
                 guestList.add(guest);
             }
         } catch (SQLException e) {
@@ -248,18 +253,30 @@ public class ReservationDaoImpl implements IDao<Composite> {
      * @param composite     Composite object containing a desired LodgeGuest
      * @return              a ResultSet containing the Lodge guest, if found, otherwise an empty ResultSet
      */
-    private ResultSet search(@NotNull Composite composite) {
+    @Override
+    public ResultSet search(@NotNull Composite composite) throws SQLException {
         ResultSet resultSetSearch = null;
         PreparedStatement pstmt;
-        String query = "select * from reservations.guests where uuid=?;";
+        String query = "select * from reservations.guests where firstname=?;";  //todo revert to uuid
         try {
             pstmt = connection.prepareStatement(query);
-            pstmt.setString(1, composite.getGuest().getID().toString());
+            pstmt.setString(1, composite.getGuest().getFirstName().toString()); //todo revert to search by uuid (from firstname)
             resultSetSearch = pstmt.executeQuery();
         } catch (SQLException e) {
             System.err.println(e);
+            throw new SQLException("Exception from ReservationDaoImpl", e);
         }
         return resultSetSearch;
+    }
+
+
+    public void displayDB() {
+        int ctr = 0;
+        guestList = this.getAll();
+        for (LodgeGuest g : guestList) {
+            System.out.println(ctr + " " + g);
+            ctr++;
+        }
     }
 
     public boolean closeDB() {

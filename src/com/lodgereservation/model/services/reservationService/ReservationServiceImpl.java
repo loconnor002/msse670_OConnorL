@@ -7,14 +7,21 @@ import com.lodgereservation.model.domain.Room;
 import com.lodgereservation.model.services.exception.ReservationException;
 
 public class ReservationServiceImpl implements IReservationService {
-    //todo change params to composite domain objects?
+
 
     @Override
     public boolean bookReservation(Composite composite) {
         boolean success = false;
+        Lodge lodge = composite.getLodge();
+        Reservation res = composite.getReservation();
+        Room room;
 
         if (composite.getReservation() != null) {
-            composite.getLodge().getReservations().add(composite.getReservation());
+
+            composite.getLodge().getReservations().add(res);
+            room = lodge.getRoom(composite.getRoom().getRoomNum());
+            room.setAvailable(false);
+
             success = true;
         }
         return success;
@@ -32,12 +39,12 @@ public class ReservationServiceImpl implements IReservationService {
         boolean isCancelled = false;
         Reservation res = composite.getReservation();
 
-        if (res.getID() != null && composite.getLodge().getReservations().contains(res)) {
-            System.out.println("Cancelling reservation: " + res);
+        if (composite.getLodge().getReservations().contains(res)) {
+            //System.out.println("Cancelling reservation: " + res);
             composite.getLodge().getReservations().remove(res);
             composite.getLodge().getCancellations().add(res);
             res.getRoom().setAvailable(true);
-            isCancelled = composite.getLodge().getReservations().contains(res);
+            isCancelled = !composite.getLodge().getReservations().contains(res);
         }
         else {
             System.out.println("Unable to cancel reservation: " + res);
@@ -48,49 +55,35 @@ public class ReservationServiceImpl implements IReservationService {
 
 
     /**
-     * CREATE operation. Make a new blank reservation.
-     * @return new Reservation object
-     */
-    @Override
-    public Reservation createReservation(Composite composite) throws ReservationException {
-        return new Reservation(composite);
-    }
-
-
-    /**
      * READ operation. Display a list of existing reservations for this lodge.
-     * @param lodge
+     *
+     * @param composite Composite object holding a Lodge
      */
     @Override
-    public void listReservations(Lodge lodge) throws ReservationException {
-        System.out.println(lodge.getLodgeName() + lodge.getReservations());
-
+    public void listReservations(Composite composite) throws ReservationException {
+        System.out.println(composite.getLodge().getLodgeName() + composite.getLodge().getReservations());
     }
 
 
     /**
      * UPDATE operation. Change the room on an existing reservation.
      *
-     * @param lodge
-     * @param res
-     * @param newRoom
-     * @return      true if operation successful, false otherwise
+     * @param composite Composite object containing reservation, room, new room
+     * @return          true if update was successful, false otherwise
      */
     @Override
-    public boolean updateReservationRoom(Lodge lodge, Reservation res, Room newRoom) throws ReservationException {
-        boolean success = false;
-        Room oldRoom;
+    public boolean updateReservationRoom(Composite composite) throws ReservationException {
+        Room oldRoom = composite.getRoom();
+        Room newRoom = composite.getNewRoom();
+        Lodge lodge = composite.getLodge();
+        Reservation res = composite.getReservation();
 
-        if (res.getID() != null && lodge.getReservations().contains(res)) {
-            oldRoom = res.getRoom();
+        if (lodge.getReservations().contains(res)) {
             if (newRoom.getAvailable() && newRoom.getClean()) {
-                lodge.getReservations().remove(res);
-                lodge.getRoom(oldRoom.getRoomNum()).setAvailable(true);
-                lodge.getRoom(newRoom.getRoomNum()).setAvailable(false);
-                res.setRoom(newRoom);
-                lodge.getReservations().add(res);
-
-                success = true;
+                composite.getLodge().getReservations().remove(res);
+                composite.getLodge().getRoom(composite.getRoom().getRoomNum()).setAvailable(true);
+                newRoom.setAvailable(false);
+                composite.getReservation().setRoom(newRoom);
             }
             else {
                 System.out.println("Room " + newRoom.getRoomNum() + " not available");
@@ -100,7 +93,7 @@ public class ReservationServiceImpl implements IReservationService {
             System.out.println("Reservation not found, cannot update room for: " + res);
             throw new ReservationException("Unable to update reservation: " + res);
         }
-        return success;
+        return composite.getReservation().getRoom().getRoomNum() == newRoom.getRoomNum();
     }
 
 
@@ -113,7 +106,7 @@ public class ReservationServiceImpl implements IReservationService {
      */
     @Override
     public boolean deleteReservation(Lodge lodge, Reservation res) throws ReservationException {
-        if (res.getID() != null && lodge.getReservations().contains(res)) {
+        if (lodge.getReservations().contains(res)) {
             lodge.getReservations().remove(res);
             return true;
         }

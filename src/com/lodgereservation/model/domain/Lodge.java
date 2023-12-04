@@ -63,6 +63,7 @@ public class Lodge implements Serializable {
         for (Room elem : rooms) {
             if (elem.getRoomNum() == roomNum) {
                 room = elem;
+
             }
         }
         return room;

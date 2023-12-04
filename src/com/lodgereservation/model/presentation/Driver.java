@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Driver {
-    @SuppressWarnings("ThrowablePrintedToSystemOut")
     public static void main(String[] args) {
         boolean success;
         int ctr = 1;
@@ -19,11 +18,26 @@ public class Driver {
         LodgeReservationManager manager;
         Reservation res;
         ReservationDaoImpl database;
+        Room room, newRoom;
         ArrayList<LodgeGuest> guestList;
 
+        //instantiate & configure Composite obj, pass it to services, print returned output from methods
+        lodge = new Lodge("Alyeska", "Girdwood");
         guest = new LodgeGuest("Arthur", "Dent", "earth.man@h2g2.com", "17201111110");
-        composite = new Composite();
-        composite.setGuest(guest);
+
+        //add 10 rooms to lodge, (roomNumber, available=true, clean=true)
+        for (int i = 0; i < 10; i++) {
+            lodge.getRooms().add(new Room(42+i, true, true));
+        }
+
+        // create reservation and add it to lodge
+        lodge.addGuest(guest);
+        res = new Reservation(LocalDate.of(2023, 5, 20), guest, lodge.getRoom(42));
+        lodge.getRoom(42).setAvailable(false);
+        lodge.getReservations().add(res);
+
+        // create composite
+        composite = new Composite(guest, res, lodge.getRoom(42), lodge.getRoom(43), lodge);
 
         try {
             // Create database
@@ -39,38 +53,22 @@ public class Driver {
             System.out.println("Update database (change LodgeGuest phone): success=" + success);
 
             // Read from database
-            guestList = database.getAll();
-            success = !guestList.isEmpty();
+            //guestList = database.getAll();
+            //success = !guestList.isEmpty();
             System.out.println("Read database: success=" + success + "\n Guests from DB:");
-            for (LodgeGuest g : guestList) {
-                System.out.println(ctr + " " + g);
-                ctr++;
-            }
+            database.displayDB();
 
             //Delete from database
             //success = database.delete(composite);
             System.out.println("Delete from database: success=" + success);
-            success = database.closeDB();
-            System.out.println("database connection closed: " + success);
+
+            //success = database.closeDB();
+            System.out.println("database connection closed: " + database.closeDB());
+
         } catch (Exception e) {
-            System.err.println(e);
+            System.err.println(e.getClass().toString());
+            System.err.println("Exception from Main: " + e.getMessage());
         }
-        //wk5 instantiate & configure Composite obj, pass it to services, print returned output from methods
-        lodge = new Lodge("Alyeska", "Girdwood");
-
-        //add 10 rooms to lodge, (roomNumber, available=true, clean=true)
-        for (int i = 0; i < 10; i++) {
-            lodge.getRooms().add(new Room(42+i, true, true));
-        }
-
-        // create reservation and add it to lodge
-        res = new Reservation(LocalDate.of(2023, 5, 20), guest, lodge.getRoom(42));
-        lodge.getRoom(42).setAvailable(false);
-        lodge.getReservations().add(res);
-        lodge.addGuest(guest);
-
-        // create composite
-        composite = new Composite(guest, res, lodge.getRoom(42), lodge.getRoom(43), lodge);
 
         try {
             manager = LodgeReservationManager.getInstance();
@@ -89,12 +87,16 @@ public class Driver {
             success = manager.performAction("CHECK_INVENTORY", composite);
             System.out.println("CHECK_INVENTORY success: " + success);
 
-        } catch (Exception e) {
-            System.err.println("Exception from main: " + e.getMessage());
-        }
+            manager = LodgeReservationManager.getInstance();
+            System.out.println(composite.getGuest().getFirstName());
+            success = manager.performAction("LOGIN_LODGE_GUEST", composite);
+            System.out.println("LOGIN success: " + success);
 
-        manager = LodgeReservationManager.getInstance();
-        success = manager.performAction("LOGIN_LODGE_GUEST", composite);
-        System.out.println("LOGIN success: " + success);
+        } catch (Exception e) {
+            System.err.println("Exception from Main: " + e.getClass());
+            e.printStackTrace();
+
+
+        }
     }
 }

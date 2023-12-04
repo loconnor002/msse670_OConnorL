@@ -1,8 +1,14 @@
 package com.lodgereservation.model.business.manager;
 
 import com.lodgereservation.model.business.exception.PropertyFileNotFoundException;
+import com.lodgereservation.model.business.exception.ServiceLoadException;
 import com.lodgereservation.model.domain.Composite;
+import com.lodgereservation.model.services.exception.InventoryException;
+import com.lodgereservation.model.services.exception.LoginException;
+import com.lodgereservation.model.services.exception.ReservationException;
 import com.lodgereservation.model.services.manager.PropertyManager;
+
+import java.sql.SQLException;
 
 //todo javadoc
 public abstract class ManagerSuperType {
@@ -27,7 +33,8 @@ public abstract class ManagerSuperType {
      * @param composite     the application-specific domain state
      * @return              true if action was successful, false otherwise
      */
-    public abstract boolean performAction(String commandString, Composite composite);
+    public abstract boolean performAction(String commandString, Composite composite)
+            throws ServiceLoadException, ReservationException, InventoryException, LoginException, SQLException;
 
 
     /**

@@ -8,41 +8,46 @@ import java.util.ArrayList;
 
 public class InventoryServiceImpl implements IInventoryService {
 
-    @Override
-    public boolean addRoomToLodge(Composite composite, Room room) throws InventoryException {
 
-        if (room == null || composite.getLodge().getRooms().contains(room)) {
-            return false;
+    @Override
+    public boolean addRoomToLodge(Composite composite) throws InventoryException {
+        Room room = composite.getRoom();
+        if (room == null) {
+            throw new InventoryException(" room is null");
+        } else if (composite.getLodge().getRooms().contains(room)) {
+            throw new InventoryException(" room already exists in lodge");
+        } else {
+            composite.getLodge().getRooms().add(room);
         }
-        composite.getLodge().getRooms().add(room);
-        return true;
+        return composite.getLodge().getRooms().contains(composite.getRoom());
     }
 
-    @Override
-    public boolean makeRoomAvailable(Room room) throws InventoryException {
-        if (room.getClean() && room.getAvailable()){
-            room.setAvailable(true);
-            //todo update within lodge rooms data structure?
-            return true;
-        }
-        return false;
-    }
 
     @Override
-    public boolean displayAvailableRooms(Composite composite) throws InventoryException {
+    public boolean displayRooms(Composite composite) throws InventoryException {
         ArrayList<Room> rooms;
+        int ctr = 0;
+        System.out.println("Lodge inventory for " + composite.getLodge().getLodgeName());
         rooms = composite.getLodge().getRooms();
         for (Room room : rooms) {
-            if (room.getAvailable()) {
-                System.out.println(room);
-            }
+            System.out.println(room);
+            ctr++;
         }
-        return true;
+        if (ctr == 0) {
+            throw new InventoryException("\tNo inventory displayed for: " + composite.getLodge());
+        }
+        return ctr > 0;
     }
 
     @Override
-    public boolean deleteRoom() throws InventoryException {
-        //todo implement delete
-        return false;
+    public boolean deleteRoom(Composite composite) throws InventoryException {
+        Room room = composite.getRoom();
+        if (composite.getLodge().getRooms().contains(room)) {
+            composite.getLodge().getRooms().remove(room);
+        } else {
+            throw new InventoryException(" room does not exist in this lodge. Cannot remove.");
+        }
+        composite.getLodge().getRooms().remove(room);
+        return composite.getLodge().getRooms().contains(room);
     }
 }

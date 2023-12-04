@@ -3,6 +3,8 @@ package com.lodgereservation.model.persistence;
 import com.lodgereservation.model.domain.LodgeGuest;
 import org.jetbrains.annotations.NotNull;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -18,4 +20,5 @@ public interface IDao<T> {
     boolean add(@NotNull T item);
     boolean updatePhone(T item);
     boolean delete(T item);
+    ResultSet search(@NotNull T item) throws SQLException;
 }
