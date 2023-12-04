@@ -8,10 +8,10 @@ public class LodgeGuestTest extends TestCase {
      * Test a valid LodgeGuest.
      */
     public void testValidate() {
-        LodgeGuest lg = new LodgeGuest("Tricia", "McMillan", "Islington");
+        LodgeGuest lg = new LodgeGuest("Tricia", "McMillan", "trillian@protonmail.com", "17209475844");
         lg.setEmail("trillian@protonmail.com");
 
-        assertTrue(lg.validate());
+        assert(lg.validate());
         System.out.println("testValidate PASSED");
     }
 

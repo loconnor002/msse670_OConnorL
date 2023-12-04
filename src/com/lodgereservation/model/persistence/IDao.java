@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public interface IDao<T> {
 
     ArrayList<LodgeGuest> getAll();
-    boolean add(@NotNull T item);
+    boolean add(@NotNull T item) throws SQLException;
     boolean updatePhone(T item);
     boolean delete(T item);
     ResultSet search(@NotNull T item) throws SQLException;

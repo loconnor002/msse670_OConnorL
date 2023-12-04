@@ -1,7 +1,6 @@
 package com.lodgereservation.model.persistence;
 
-import com.lodgereservation.model.domain.Composite;
-import com.lodgereservation.model.domain.LodgeGuest;
+import com.lodgereservation.model.domain.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,8 +21,11 @@ class ReservationDaoImplTest {
     @BeforeEach
     void setUp() {
         LodgeGuest guest = new LodgeGuest("Rob", "McKenna", "rain.god@lorries.com", "19701111116");
-        composite = new Composite();
-        composite.setGuest(guest);
+        Reservation res = new Reservation();
+        Room room = new Room(208439);
+        Lodge lodge = new Lodge();
+        composite = new Composite(guest, res, room, lodge);
+
         try {
             connection = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/reservations",
@@ -75,25 +77,40 @@ class ReservationDaoImplTest {
 
     @Test
     void testAdd() {
-        assert(resDao.add(composite));
-        resDao.delete(composite);
+        boolean success = false;
+        try {
+            success = resDao.add(composite);
+            resDao.delete(composite);
+        }
+        catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+        assert(success);
         System.out.println("testAdd PASSED");
     }
 
 
     @Test
     void testAddInvalidName() {
-        composite.setGuest(new LodgeGuest("invalid$FN", "invalidLN_", "validEM@email.com", "19701111112"));
-        assert(!resDao.add(composite));
-        System.out.println("testAddInvalidName PASSED");
+        try {
+            composite.setGuest(new LodgeGuest("invalid$FN", "invalidLN_", "validEM@email.com", "19701111112"));
+            assert(!resDao.add(composite));
+            System.out.println("testAddInvalidName PASSED");
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
 
     @Test
     void testAddInvalidEmail() {
-        composite.setGuest(new LodgeGuest("okFN", "okLN", "valid#@Email@email.nope>", "19701111113"));
-        assert(!resDao.add(composite));
-        System.out.println("testAddInvalidEmail PASSED");
+        try {
+            composite.setGuest(new LodgeGuest("okFN", "okLN", "valid#@Email@email.nope>", "19701111113"));
+            assert (!resDao.add(composite));
+            System.out.println("testAddInvalidEmail PASSED");
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
 

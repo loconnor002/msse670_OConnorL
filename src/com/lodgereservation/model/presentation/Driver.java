@@ -23,7 +23,9 @@ public class Driver {
 
         //instantiate & configure Composite obj, pass it to services, print returned output from methods
         lodge = new Lodge("Alyeska", "Girdwood");
-        guest = new LodgeGuest("Arthur", "Dent", "earth.man@h2g2.com", "17201111110");
+        //guest = new LodgeGuest("Arthur", "Dent", "earth.man@h2g2.com", "17201111110");
+        guest = new LodgeGuest("Guard", "Vogon", "blaster@vogons.com", "17205184843");
+        guest.setPassword("resistance is useless");
 
         //add 10 rooms to lodge, (roomNumber, available=true, clean=true)
         for (int i = 0; i < 10; i++) {

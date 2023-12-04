@@ -77,7 +77,7 @@ public class ReservationDaoImpl implements IDao<Composite> {
      * @return          true if getAll successfully added a valid LodgeGuest to the database, false otherwise.
      */
     @Override
-    public boolean add(@NotNull Composite composite) {
+    public boolean add(@NotNull Composite composite) throws SQLException {
 
         LodgeGuest guest = composite.getGuest();
         int count = 0;
@@ -95,6 +95,7 @@ public class ReservationDaoImpl implements IDao<Composite> {
         if (validateNames(firstname, lastname) && validateEmail(email) && validatePhone(phone)) {
             try {
                 resultSetAdd = search(composite);  //empty if no duplicates found
+                resultSetAdd.next();
                 if (!resultSetAdd.next()) {
                     //insert guest into database
                     // use parameterized query instead of String query to guard against SQL injection (owasp.org)
@@ -109,6 +110,7 @@ public class ReservationDaoImpl implements IDao<Composite> {
                 }
             } catch (SQLException e) {
                 System.err.println("From ResDao.add() " + e);
+                throw new SQLException("from resDao.add() SQL Exception", e);
             }
         }
         return (count > 0);

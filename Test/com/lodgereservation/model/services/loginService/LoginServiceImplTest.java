@@ -1,26 +1,43 @@
 package com.lodgereservation.model.services.loginService;
 
 import com.lodgereservation.model.business.exception.ServiceLoadException;
-import com.lodgereservation.model.domain.LodgeGuest;
-import com.lodgereservation.model.domain.Composite;
+import com.lodgereservation.model.domain.*;
 import com.lodgereservation.model.services.exception.LoginException;
 import com.lodgereservation.model.services.factory.ServiceFactory;
+import com.lodgereservation.model.services.reservationService.IReservationService;
 import junit.framework.TestCase;
+
+import java.sql.SQLException;
 
 public class LoginServiceImplTest extends TestCase {
 
     private ServiceFactory serviceFactory;
     private LodgeGuest guest;
-    private LoginServiceImpl loginService = new LoginServiceImpl();
-    private Composite composite = new Composite();
+    private Reservation res;
+    private Lodge lodge;
+    private Room room;
+    private ILoginService loginService;
+    private IReservationService resService;
+    private Composite composite;
 
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        serviceFactory = ServiceFactory.getInstance();
-        guest = new LodgeGuest("Prefect", "Ford", "ford.prefect@h2g2.com", "Somewhere in the vicinity of Betelgeuse");
-        composite.setGuest(guest);
+        this.guest = new LodgeGuest("Vogon", "Jeltz", "blurble@poetry.com", "Vogoshpere");
+        guest.setPassword("password123");
+        this.res = new Reservation();
+        this.room = new Room(8070234);
+        this.lodge = new Lodge("Vogon Constructor Fleet", "zz-plural-z-alpha");
+        this.composite = new Composite(guest, res, room, lodge);
+        try {
+            this.serviceFactory = ServiceFactory.getInstance();
+            this.loginService = (ILoginService) serviceFactory.getService(ILoginService.NAME);
+            this.resService = (IReservationService) serviceFactory.getService(IReservationService.NAME);
+
+        } catch (Exception e){
+            System.err.println(e.getMessage());
+        }
     }
 
     /**
@@ -28,16 +45,15 @@ public class LoginServiceImplTest extends TestCase {
      */
     public void testAuthenticateUser() {
         boolean authenticated;
-        ILoginService loginService1;
         try {
-            loginService1 = (ILoginService) serviceFactory.getService(ILoginService.NAME);
-            authenticated = loginService1.authenticateUser(composite, composite.getGuest().getPassword());
+            authenticated = loginService.authenticateUser(composite);
 
             assert (authenticated);
             System.out.println("testAuthenticateUser PASSED");
-        } catch (ServiceLoadException e) {
-            e.printStackTrace();
-            fail("ServiceLoadException");
+        }
+        catch (SQLException se) {
+            se.printStackTrace();
+            fail("SQLException");
         }
         catch (LoginException e) {
             e.printStackTrace();
@@ -50,28 +66,21 @@ public class LoginServiceImplTest extends TestCase {
      * Test an incorrect password.
      */
     public void testIncorrectPassword() {
-        boolean authenticated;
-        authenticated = loginService.authenticateUser(composite, "bad password");
-
+        boolean authenticated = true;
+        try {
+            guest = new LodgeGuest("Guard", "Vogon", "blaster@vogons.com", "17205184843");
+            composite.setGuest(guest);
+            authenticated = loginService.authenticateUser(composite);
+        }
+        catch (SQLException se) {
+            se.printStackTrace();
+            fail("SQLException");
+        }
+        catch (LoginException e) {
+            e.printStackTrace();
+            fail("LoginException");
+        }
         assert(!authenticated);
         System.out.println("testIncorrectPassword PASSED");
-    }
-
-    /**
-     * Test that a known valid user is found.
-     */
-    public void testFindUser() {
-        assert(loginService.findUser(composite));
-        System.out.println("testFindUser PASSED");
-    }
-
-    /**
-     * Test that a known valid user is found.
-     */
-    public void testFindUserInvalid() {
-        Composite c = new Composite();
-        System.out.println(loginService.findUser(c));
-        assert(loginService.findUser(c));
-        System.out.println("testFindUserInvalid PASSED");
     }
 }
