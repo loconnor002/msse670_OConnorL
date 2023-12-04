@@ -35,18 +35,4 @@ public class LoginServiceImpl implements ILoginService {
         }
         return (loginSuccess);
     }
-
-    /**
-     * Locate a user in the database.
-     *
-     * @param composite a domain object
-     * @return          true if the user was found in the system, false otherwise
-     */
-    @Override
-    public boolean findUser(Composite composite) throws SQLException {
-        //todo SQL query
-        //System.out.println("LoginServiceImplementation.findUser() stub");
-
-        return true;
-    }
 }

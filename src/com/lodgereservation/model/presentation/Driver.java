@@ -11,21 +11,17 @@ import java.util.ArrayList;
 public class Driver {
     public static void main(String[] args) {
         boolean success;
-        int ctr = 1;
         Composite composite;
         Lodge lodge;
         LodgeGuest guest;
         LodgeReservationManager manager;
         Reservation res;
         ReservationDaoImpl database;
-        Room room, newRoom;
         ArrayList<LodgeGuest> guestList;
 
         //instantiate & configure Composite obj, pass it to services, print returned output from methods
         lodge = new Lodge("Alyeska", "Girdwood");
-        //guest = new LodgeGuest("Arthur", "Dent", "earth.man@h2g2.com", "17201111110");
-        guest = new LodgeGuest("Guard", "Vogon", "blaster@vogons.com", "17205184843");
-        guest.setPassword("resistance is useless");
+        guest = new LodgeGuest("Arthur", "Dent", "earth.man@h2g2.com", "17201111110");
 
         //add 10 rooms to lodge, (roomNumber, available=true, clean=true)
         for (int i = 0; i < 10; i++) {
@@ -55,13 +51,13 @@ public class Driver {
             System.out.println("Update database (change LodgeGuest phone): success=" + success);
 
             // Read from database
-            //guestList = database.getAll();
-            //success = !guestList.isEmpty();
-            System.out.println("Read database: success=" + success + "\n Guests from DB:");
+            guestList = database.getAll();
+            success = !guestList.isEmpty();
+            System.out.println("Read database: success=" + success);// + "\n Guests from DB:");
             database.displayDB();
 
             //Delete from database
-            //success = database.delete(composite);
+            success = database.delete(composite);
             System.out.println("Delete from database: success=" + success);
 
             success = database.closeDB();
@@ -75,12 +71,10 @@ public class Driver {
             manager = LodgeReservationManager.getInstance();
 
             success = manager.performAction("RESERVE_ROOM", composite);
-            System.out.println("RESERVE ROOM success from perform action: " + success);
+            System.out.println("RESERVE ROOM success: " + success);
 
-            System.out.println("room before update: " + composite.getReservation().getRoom());
             success = manager.performAction("UPDATE_RESERVATION_ROOM", composite);
-            System.out.println("UpdateReservation success: " + success +
-                    "\nroom after update: " + composite.getReservation().getRoom());
+            System.out.println("UpdateReservation success: " + success);
 
             success = manager.performAction("CANCEL_RESERVATION", composite);
             System.out.println("CANCEL RESERVATION success: " + success);
@@ -88,8 +82,7 @@ public class Driver {
             success = manager.performAction("CHECK_INVENTORY", composite);
             System.out.println("CHECK_INVENTORY success: " + success);
 
-            manager = LodgeReservationManager.getInstance();
-            System.out.println(composite.getGuest().getFirstName());
+            //manager = LodgeReservationManager.getInstance();
             success = manager.performAction("LOGIN_LODGE_GUEST", composite);
             System.out.println("LOGIN success: " + success);
 

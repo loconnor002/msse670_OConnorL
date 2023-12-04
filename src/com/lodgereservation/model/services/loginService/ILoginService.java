@@ -11,5 +11,4 @@ public interface ILoginService extends IService {
     public final String NAME = "ILoginService";
 
     boolean authenticateUser(Composite composite) throws LoginException, SQLException;
-    boolean findUser(Composite composite) throws SQLException;
 }

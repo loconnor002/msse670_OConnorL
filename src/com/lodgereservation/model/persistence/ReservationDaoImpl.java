@@ -273,11 +273,9 @@ public class ReservationDaoImpl implements IDao<Composite> {
 
 
     public void displayDB() {
-        int ctr = 0;
         guestList = this.getAll();
         for (LodgeGuest g : guestList) {
-            System.out.println(ctr + " " + g);
-            ctr++;
+            //System.out.println(ctr + " " + g);
         }
     }
 

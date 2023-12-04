@@ -27,10 +27,10 @@ public class InventoryServiceImpl implements IInventoryService {
     public boolean displayRooms(Composite composite) throws InventoryException {
         ArrayList<Room> rooms;
         int ctr = 0;
-        System.out.println("Lodge inventory for " + composite.getLodge().getLodgeName());
+        //System.out.println("Lodge inventory for " + composite.getLodge().getLodgeName());
         rooms = composite.getLodge().getRooms();
         for (Room room : rooms) {
-            System.out.println(room);
+            //System.out.println(room);
             ctr++;
         }
         if (ctr == 0) {
