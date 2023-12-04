@@ -62,11 +62,10 @@ public class Driver {
             //success = database.delete(composite);
             System.out.println("Delete from database: success=" + success);
 
-            //success = database.closeDB();
+            success = database.closeDB();
             System.out.println("database connection closed: " + database.closeDB());
 
         } catch (Exception e) {
-            System.err.println(e.getClass().toString());
             System.err.println("Exception from Main: " + e.getMessage());
         }
 
@@ -93,10 +92,8 @@ public class Driver {
             System.out.println("LOGIN success: " + success);
 
         } catch (Exception e) {
-            System.err.println("Exception from Main: " + e.getClass());
+            System.err.println("Exception from Main: " + e.getMessage());
             e.printStackTrace();
-
-
         }
     }
 }

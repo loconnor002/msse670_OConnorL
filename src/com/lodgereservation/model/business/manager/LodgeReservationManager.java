@@ -158,7 +158,7 @@ public class LodgeReservationManager extends ManagerSuperType {
 
         try {
             iLoginService = (ILoginService) sf.getService(ILoginService.NAME);
-            isLoggedIn = iLoginService.authenticateUser(composite, composite.getGuest().getPassword());
+            isLoggedIn = iLoginService.authenticateUser(composite);
 
         } catch (ServiceLoadException sle) {
             System.err.println("ERROR: LodgeReservationManager:: failed to load Login Service " + sle.getMessage());

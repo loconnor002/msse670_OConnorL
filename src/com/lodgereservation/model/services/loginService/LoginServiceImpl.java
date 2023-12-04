@@ -20,18 +20,22 @@ public class LoginServiceImpl implements ILoginService {
         //todo make login for Person?
         ReservationDaoImpl dao;
         ResultSet resultSet;
+        boolean loginSuccess = false;
         try {
             System.out.println(composite.getGuest().getLastName());
             dao = new ReservationDaoImpl();
             resultSet = dao.search(composite);
             while (resultSet.next()) {
-                System.out.println("from search: " + resultSet.getString("firstname"));
+                System.out.println("from search: " + resultSet.getString("firstname") + " " + resultSet.getString("password"));
+                if (resultSet.getString("password").equals("password123")) {
+                    loginSuccess = true;
+                }
             }
 
         } catch (SQLException se) {
             throw new SQLException("ERROR: SQLException from LoginService", se);
         }
-        return (resultSet.next());
+        return (loginSuccess);
     }
 
     /**
