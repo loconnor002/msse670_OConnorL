@@ -2,8 +2,6 @@ package com.lodgereservation.model.services.loginService;
 
 import com.lodgereservation.model.domain.Composite;
 import com.lodgereservation.model.persistence.ReservationDaoImpl;
-
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 

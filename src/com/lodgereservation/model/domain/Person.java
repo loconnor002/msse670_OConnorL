@@ -36,16 +36,6 @@ public class Person implements Serializable {
         email = "";
     }
 
-    public Person(String firstName, String lastName, String phone, String email, String address, String password) {
-        this.address = address;
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phone = phone;
-        this.password = password;
-        this.passwordHash = 0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000;
-    }
-
     public Person(String firstName, String lastName, String email, String phone){
         address = "";
         this.email = email;
@@ -89,24 +79,12 @@ public class Person implements Serializable {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
     public String getPhone() {
         return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
     }
 
     public String getPassword() { return this.password; }

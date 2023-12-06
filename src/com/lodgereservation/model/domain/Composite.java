@@ -1,7 +1,6 @@
 package com.lodgereservation.model.domain;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 
@@ -107,16 +106,6 @@ public class Composite implements Serializable {
     }
 
     public Room getNewRoom() { return newRoom; }
-
-    public void setNewRoom(Room newRoom) {
-        // todo update if add rooms table to database
-        this.newRoom = newRoom;
-        this.addUpdate("Set new room: " + newRoom + "\n");
-    }
-
-    public HashMap<LocalDateTime, String> getUpdates() {
-        return updates;
-    }
 
     public Lodge getLodge() {
         return lodge;

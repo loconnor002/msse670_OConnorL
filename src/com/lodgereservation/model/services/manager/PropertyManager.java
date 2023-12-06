@@ -41,15 +41,4 @@ public class PropertyManager {
             }
         }
     } // end loadProperties()
-
-
-    /**
-     * Return the Value for the passed Key
-     *  //todo - use in week 6-8?
-     * @param key
-     * @return
-     */
-    static public String getPropertyValue(String key) {
-        return properties.getProperty(key);
-    }
 }

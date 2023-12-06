@@ -57,13 +57,8 @@ public class Room implements Serializable {
         return Objects.hash(available, roomName, roomNum);
     }
 
-    //todo, return boolean success?
     public void setAvailable(boolean available) {
         this.available = available;
-    }
-
-    public void setRoomNum(int roomNum) {
-        this.roomNum = roomNum;
     }
 
     public boolean getAvailable() {
@@ -72,10 +67,6 @@ public class Room implements Serializable {
 
     public int getRoomNum() {
         return roomNum;
-    }
-
-    public void setClean(boolean clean) {
-        this.clean = clean;
     }
 
     public boolean getClean() {

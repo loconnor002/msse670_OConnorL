@@ -4,14 +4,12 @@ import com.lodgereservation.model.domain.Composite;
 import com.lodgereservation.model.domain.LodgeGuest;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.UUID;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -24,6 +22,7 @@ import java.util.regex.PatternSyntaxException;
  *
  * @author lauren.oconnor
  */
+@SuppressWarnings("ThrowablePrintedToSystemOut")
 public class ReservationDaoImpl implements IDao<Composite> {
 
     private ArrayList<LodgeGuest> guestList;
@@ -71,7 +70,6 @@ public class ReservationDaoImpl implements IDao<Composite> {
                 guestList.add(guest);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
             System.err.println("From ReservationDao.getAll()" + e);
         }
         return guestList;
@@ -146,11 +144,10 @@ public class ReservationDaoImpl implements IDao<Composite> {
      */
     @Override
     public boolean updatePhone(@NotNull Composite composite) throws SQLException {
-        int count = 0;
+        int count;
         LodgeGuest guest = composite.getGuest();
         ResultSet resultSet5;
         assert guest != null : "Null guest";
-        String guestID = guest.getID().toString();
         String query2;
         PreparedStatement preppedStatement;
 
@@ -172,7 +169,6 @@ public class ReservationDaoImpl implements IDao<Composite> {
             }
 
         } catch (SQLException e) {
-            System.err.println(e);
             throw new SQLException("SQL Exception from  dao.update phone", e);
         }
         return (count > 0);
@@ -323,9 +319,11 @@ public class ReservationDaoImpl implements IDao<Composite> {
 
 
     public void displayDB() {
+        int ctr = 0;
         guestList = this.getAll();
         for (LodgeGuest g : guestList) {
-            //System.out.println(ctr + " " + g);
+            System.out.println(ctr + " " + g);
+            ctr++;
         }
     }
 

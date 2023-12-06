@@ -9,7 +9,7 @@ public class ServiceFactory {
     private ServiceFactory() {}
 
     //Part of Singleton Pattern
-    private static ServiceFactory serviceFactory = new ServiceFactory();
+    private static final ServiceFactory serviceFactory = new ServiceFactory();
 
     //Part of Singleton Pattern
     public static ServiceFactory getInstance() {

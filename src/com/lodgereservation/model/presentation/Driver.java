@@ -5,7 +5,6 @@ import com.lodgereservation.model.domain.*;
 import com.lodgereservation.model.persistence.ReservationDaoImpl;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Driver {
@@ -69,7 +68,6 @@ public class Driver {
             System.out.println("database connection closed: " + database.closeDB());
 
         } catch (Exception e) {
-            e.printStackTrace();
             System.err.println("Exception from Main: " + e.getMessage());
         }
 
@@ -95,7 +93,6 @@ public class Driver {
 
         } catch (Exception e) {
             System.err.println("Exception from Main: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 }

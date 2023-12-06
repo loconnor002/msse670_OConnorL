@@ -11,7 +11,8 @@ public interface IReservationService extends IService {
     //todo convert all params to ReservationComposite?
     boolean bookReservation(Composite composite) throws ReservationException;
     boolean cancelReservation(Composite composite) throws ReservationException;
-    void listReservations(Composite composite) throws ReservationException;
     boolean updateReservationRoom(Composite composite) throws ReservationException;
-    boolean deleteReservation(Lodge lodge, Reservation res) throws ReservationException;
-}
+    boolean deleteReservation(Composite composite) throws ReservationException;
+    boolean listReservations(Composite composite) throws ReservationException;
+
+    }

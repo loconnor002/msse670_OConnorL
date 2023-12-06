@@ -3,7 +3,6 @@ package com.lodgereservation.model.domain;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
-import java.util.UUID;
 
 public class Reservation implements Serializable {
 
@@ -51,10 +50,6 @@ public class Reservation implements Serializable {
 
     public LocalDate getDate() {
         return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
     }
 
     public LodgeGuest getGuest() {

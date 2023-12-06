@@ -60,8 +60,9 @@ public class ReservationServiceImpl implements IReservationService {
      * @param composite Composite object holding a Lodge
      */
     @Override
-    public void listReservations(Composite composite) throws ReservationException {
+    public boolean listReservations(Composite composite) throws ReservationException {
         System.out.println(composite.getLodge().getLodgeName() + composite.getLodge().getReservations());
+        return true;
     }
 
 
@@ -73,7 +74,6 @@ public class ReservationServiceImpl implements IReservationService {
      */
     @Override
     public boolean updateReservationRoom(Composite composite) throws ReservationException {
-        Room oldRoom = composite.getRoom();
         Room newRoom = composite.getNewRoom();
         Lodge lodge = composite.getLodge();
         Reservation res = composite.getReservation();
@@ -98,19 +98,25 @@ public class ReservationServiceImpl implements IReservationService {
 
 
     /**
-     * DELETE operation. Remove a reservation.
      *
-     * @param lodge
-     * @param res
-     * @return      true if operation successful, false otherwise
+     * @param composite
+     * @return
+     * @throws ReservationException
      */
     @Override
-    public boolean deleteReservation(Lodge lodge, Reservation res) throws ReservationException {
+    public boolean deleteReservation(Composite composite) throws ReservationException {
+        boolean success = false;
+        Reservation res = composite.getReservation();
+        Lodge lodge = composite.getLodge();
         if (lodge.getReservations().contains(res)) {
             lodge.getReservations().remove(res);
-            return true;
+            lodge.getCancellations().add(res);
+            success = true;
+
+        } else {
+            System.out.println("Reservation not found, cannot delete: " + res);
+            throw new ReservationException("Error from ReservationServiceImpl: " + res);
         }
-        System.out.println("Reservation not found, cannot delete: " + res);
-        return false;
+        return success;
     }
 }

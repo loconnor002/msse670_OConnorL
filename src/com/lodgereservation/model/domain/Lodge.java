@@ -63,7 +63,6 @@ public class Lodge implements Serializable {
         for (Room elem : rooms) {
             if (elem.getRoomNum() == roomNum) {
                 room = elem;
-
             }
         }
         return room;
@@ -79,47 +78,20 @@ public class Lodge implements Serializable {
         return lodgeName;
     }
 
-    public void setLodgeName(String lodgeName) {
-        this.lodgeName = lodgeName;
-    }
-
-    public String getLodgeAddr() {
-        return lodgeAddr;
-    }
-
-    public void setLodgeAddr(String lodgeAddr) {
-        this.lodgeAddr = lodgeAddr;
-    }
-
     public ArrayList<Reservation> getReservations() {
         return reservations;
-    }
-
-    public void setReservations(ArrayList<Reservation> reservations) {
-        this.reservations = reservations;
     }
 
     public ArrayList<Reservation> getCancellations() {
         return cancellations;
     }
 
-    public void setCancellations(ArrayList<Reservation> cancellations) {
-        this.cancellations = cancellations;
-    }
-
     public ArrayList<Room> getRooms() {
         return rooms;
-    }
-
-    public void setRooms(ArrayList<Room> rooms) {
-        this.rooms = rooms;
     }
 
     public ArrayList<LodgeGuest> getGuests() {
         return guests;
     }
 
-    public void setGuests(ArrayList<LodgeGuest> guests) {
-        this.guests = guests;
-    }
 }
