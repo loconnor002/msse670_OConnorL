@@ -18,7 +18,7 @@ public interface IDao<T> {
 
     ArrayList<LodgeGuest> getAll();
     boolean add(@NotNull T item) throws SQLException;
-    boolean updatePhone(T item);
+    boolean updatePhone(T item) throws SQLException;
     boolean delete(T item);
     ResultSet search(@NotNull T item) throws SQLException;
 }

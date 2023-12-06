@@ -13,7 +13,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
 
-//todo javadoc
+/**
+ * Provides access to the Service layer using a facade design pattern.
+ *
+ * @author lauren.oconnor 2023
+ * @author adapted from Mike.Prasad
+ */
 public class LodgeReservationManager extends ManagerSuperType {
 
     //todo - why static?

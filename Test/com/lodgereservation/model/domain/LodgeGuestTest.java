@@ -30,8 +30,7 @@ public class LodgeGuestTest extends TestCase {
      * Test an invalid LodgeGuest (all attributes empty).
      */
     public void testNotValidate() {
-        LodgeGuest lg = new LodgeGuest();
-
+        LodgeGuest lg = new LodgeGuest("nope", "nope", "nope", "nope");
         assert(!lg.validate());
         System.out.println("testNotValidate PASSED");
     }

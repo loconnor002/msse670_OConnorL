@@ -8,32 +8,27 @@ import com.lodgereservation.model.services.reservationService.IReservationServic
 import junit.framework.TestCase;
 
 import java.sql.SQLException;
+import java.util.UUID;
 
 public class LoginServiceImplTest extends TestCase {
 
-    private ServiceFactory serviceFactory;
     private LodgeGuest guest;
-    private Reservation res;
-    private Lodge lodge;
-    private Room room;
     private ILoginService loginService;
-    private IReservationService resService;
     private Composite composite;
 
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        this.guest = new LodgeGuest("Vogon", "Jeltz", "blurble@poetry.com", "Vogoshpere");
+        this.guest = new LodgeGuest(UUID.randomUUID(), "Vogon", "Jeltz", "blurble@poetry.com", "Vogoshpere", 0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000);
         guest.setPassword("password123");
-        this.res = new Reservation();
-        this.room = new Room(8070234);
-        this.lodge = new Lodge("Vogon Constructor Fleet", "zz-plural-z-alpha");
+        Reservation res = new Reservation();
+        Room room = new Room(8070234);
+        Lodge lodge = new Lodge("Vogon Constructor Fleet", "zz-plural-z-alpha");
         this.composite = new Composite(guest, res, room, lodge);
         try {
-            this.serviceFactory = ServiceFactory.getInstance();
+            ServiceFactory serviceFactory = ServiceFactory.getInstance();
             this.loginService = (ILoginService) serviceFactory.getService(ILoginService.NAME);
-            this.resService = (IReservationService) serviceFactory.getService(IReservationService.NAME);
 
         } catch (Exception e){
             System.err.println(e.getMessage());

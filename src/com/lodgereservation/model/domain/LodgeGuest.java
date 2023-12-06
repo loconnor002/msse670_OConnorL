@@ -8,9 +8,15 @@ public class LodgeGuest extends Person implements Serializable {
 
     private final UUID GUEST_ID;
 
-    public LodgeGuest()  {
+    public LodgeGuest(UUID uuid, String firstname, String lastname, String email, String phone, long passwordHash)  {
         super();
-        GUEST_ID = UUID.randomUUID();
+        GUEST_ID = uuid;
+        this.firstName = firstname;
+        this.lastName = lastname;
+        this.email = email;
+        this.phone = phone;
+        this.password = "password123";
+        this.passwordHash = passwordHash;
     }
 
     public LodgeGuest(String firstName, String lastName, String address) {
@@ -42,7 +48,8 @@ public class LodgeGuest extends Person implements Serializable {
                 ", LastName=" + lastName +
                 ", Address=" + address +
                 ", Phone=" + phone +
-                ", Email=" + email + "}";
+                ", Email=" + email +
+                ", PasswordHash=" + String.valueOf(passwordHash) + "}";
     }
 
 
@@ -78,7 +85,7 @@ public class LodgeGuest extends Person implements Serializable {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(GUEST_ID);
+        return Objects.hash(firstName, lastName);   //(GUEST_ID);
     }
 
     public UUID getID() {

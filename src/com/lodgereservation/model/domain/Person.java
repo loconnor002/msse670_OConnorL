@@ -15,6 +15,7 @@ public class Person implements Serializable {
     protected String phone;
     protected String address;   //todo Address or ContactInfo object
     protected String password;
+    protected long passwordHash;
 
     public Person() {
         firstName = "";
@@ -23,6 +24,7 @@ public class Person implements Serializable {
         email = "";
         address = "";
         password = "default password";
+        passwordHash = 0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000;
     }
 
     public Person(String firstName, String lastName, String address) {
@@ -41,6 +43,7 @@ public class Person implements Serializable {
         this.lastName = lastName;
         this.phone = phone;
         this.password = password;
+        this.passwordHash = 0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000;
     }
 
     public Person(String firstName, String lastName, String email, String phone){
@@ -50,6 +53,7 @@ public class Person implements Serializable {
         this.lastName = lastName;
         this.phone = phone;
         this.password = "default password";
+        this.passwordHash = 0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000;
     }
 
     /**
@@ -108,4 +112,8 @@ public class Person implements Serializable {
     public String getPassword() { return this.password; }
 
     public void setPassword(String pswd) {this.password = pswd;}
+
+    public Long getPasswordHash() {
+        return this.passwordHash;
+    }
 }

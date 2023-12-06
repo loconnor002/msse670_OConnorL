@@ -3,6 +3,7 @@ package com.lodgereservation.model.services.loginService;
 import com.lodgereservation.model.domain.Composite;
 import com.lodgereservation.model.persistence.ReservationDaoImpl;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -23,16 +24,19 @@ public class LoginServiceImpl implements ILoginService {
         boolean loginSuccess = false;
         try {
             dao = new ReservationDaoImpl();
-            resultSet = dao.search(composite);
-            while (resultSet.next()) {
-                if (resultSet.getString("password").equals("password123")) {
+            resultSet = dao.searchByName(composite);
+            if (resultSet.next()) {
+                if ((resultSet.getString("password").equals("password123")) ||
+                 (String.valueOf(resultSet.getString(8)).equals(String.valueOf(0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000)))) {
                     loginSuccess = true;
                 }
             }
-
         } catch (SQLException se) {
             throw new SQLException("ERROR: SQLException from LoginService", se);
         }
         return (loginSuccess);
     }
+
+
+
 }

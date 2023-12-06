@@ -1,11 +1,14 @@
 package com.lodgereservation.model.business.manager;
 
+import com.lodgereservation.model.persistence.ReservationDaoImpl;
 import com.lodgereservation.model.services.factory.ServiceFactory;
 import com.lodgereservation.model.domain.*;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.UUID;
 
 
 public class LodgeReservationManagerTest {
@@ -23,7 +26,7 @@ public class LodgeReservationManagerTest {
     public void setUp() throws Exception {
         ManagerSuperType.loadProperties();
         mgr = LodgeReservationManager.getInstance();
-        guest = new LodgeGuest("Tricia", "McMillan", "Islington");
+        guest = new LodgeGuest(UUID.randomUUID(), "trillian", "mac", "trillian@earthling.com", "17207777777", 0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000);
         lodge = new Lodge("Kodiak", "Kodiak Island, AK");
         room = new Room(41, true, true);
         newRoom = new Room(40, true, true);
@@ -43,12 +46,17 @@ public class LodgeReservationManagerTest {
     public void testPerformActionLogin() {
         boolean performed = false;
         try {
+            ReservationDaoImpl dao = new ReservationDaoImpl();
+
+            performed = dao.add(composite);
             performed = mgr.performAction("LOGIN_LODGE_GUEST", composite);
+            dao.delete(composite);
+            dao.closeDB();
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
         assert(performed);
-        System.out.println("testPerformAction PASSED");
+        System.out.println("testPerformActionLogin PASSED");
     }
 
     @Test

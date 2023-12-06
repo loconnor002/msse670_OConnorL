@@ -10,7 +10,13 @@ import com.lodgereservation.model.services.manager.PropertyManager;
 
 import java.sql.SQLException;
 
-//todo javadoc
+/**
+ * Provides an abstract superclass to Manager subclasses, observing one of
+ * OOP's principles: code reuse through abstraction.
+ *
+ * @author lauren.oconnor
+ * @author adapted form Mike.Prasad
+ */
 public abstract class ManagerSuperType {
 
     // static initializer block, executes if ManagerSuperType is extended/referenced

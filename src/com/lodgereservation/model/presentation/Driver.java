@@ -46,9 +46,15 @@ public class Driver {
             System.out.println("Update database (insert a new LodgeGuest): success=" + success);
 
             // Update database (change guest's phone number)
-            composite.getGuest().setPhone("19703333333");
+            //composite.getGuest().setPhone("19702345678");         //todo uncomment for demonstration
             success = database.updatePhone(composite);
             System.out.println("Update database (change LodgeGuest phone): success=" + success);
+
+
+            //todo remove
+            success = database.updatePasswordHashes();
+            System.out.println("update hashes success: " + success);
+
 
             // Read from database
             guestList = database.getAll();
@@ -60,10 +66,10 @@ public class Driver {
             success = database.delete(composite);
             System.out.println("Delete from database: success=" + success);
 
-            success = database.closeDB();
             System.out.println("database connection closed: " + database.closeDB());
 
         } catch (Exception e) {
+            e.printStackTrace();
             System.err.println("Exception from Main: " + e.getMessage());
         }
 
@@ -82,8 +88,9 @@ public class Driver {
             success = manager.performAction("CHECK_INVENTORY", composite);
             System.out.println("CHECK_INVENTORY success: " + success);
 
-            //manager = LodgeReservationManager.getInstance();
-            success = manager.performAction("LOGIN_LODGE_GUEST", composite);
+
+            success = manager.
+                    performAction("LOGIN_LODGE_GUEST", composite);
             System.out.println("LOGIN success: " + success);
 
         } catch (Exception e) {
