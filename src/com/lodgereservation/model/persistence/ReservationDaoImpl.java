@@ -352,8 +352,9 @@ public class ReservationDaoImpl implements IDao<Composite> {
 
     /**
      * Salt and hash guests' passwords for secure storage in the database.
+     * <a href="https://www.baeldung.com/java-password-hashing">Citation: Baeldung.com</a>
      *
-     * @return                          true if updates were successful, false otherwise
+     * @return true if updates were successful, false otherwise
      * @throws SQLException             propagates exception if sql syntax was incorrect or database error
      * @throws NoSuchAlgorithmException propagates exception if sha512 algorithm not found
      */
