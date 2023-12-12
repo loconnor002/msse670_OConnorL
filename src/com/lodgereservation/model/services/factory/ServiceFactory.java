@@ -16,7 +16,6 @@ public class ServiceFactory {
         return serviceFactory;
     }
 
-
     /**
      * Get a service object.
      *

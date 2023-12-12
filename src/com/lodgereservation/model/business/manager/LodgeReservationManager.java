@@ -82,6 +82,7 @@ public class LodgeReservationManager extends ManagerSuperType {
         try {
             reservationService = (IReservationService) sf.getService(IReservationService.NAME);
             isUpdated = reservationService.updateReservationRoom(composite);
+
         } catch(ServiceLoadException sle) {
             System.err.println("ServiceLoadException from LodgeReservationManager: " + sle.getMessage());
         } catch (ReservationException re) {

@@ -7,7 +7,7 @@ import java.util.HashMap;
 /**
  * Provides a container for passing domain objects throughout the layered architecture of
  * the LodgeReservation application.
- *
+ * <p>
  * <a href="https://www.oracle.com/technical-resources/articles/java/javadoc-tool.html">Future Reference, Javadoc</a>
  */
 public class Composite implements Serializable {

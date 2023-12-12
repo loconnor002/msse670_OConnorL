@@ -194,13 +194,13 @@ public class ReservationDaoImpl implements IDao<Composite> {
 
         try {
             // if guest is not null, make sure guest exists in the database
-            resultSetDelete = search(composite);
+            resultSetDelete = searchByName(composite);
 
             if (resultSetDelete.next()) {
                 // guest was found in the database, proceed to delete
-                query = "delete from reservations.guests where uuid=?;";
+                query = "delete from reservations.guests where firstname=?;";
                 pstmt = connection.prepareStatement(query);
-                pstmt.setString(1, guestID);
+                pstmt.setString(1, guest.getFirstName());
                 count = pstmt.executeUpdate();                              // number of rows changed
             } else {
                 System.out.println(guest.getFirstName() + " not found in the database. Cannot delete.");
@@ -371,7 +371,7 @@ public class ReservationDaoImpl implements IDao<Composite> {
             resultSetUpdate = dao.getResultSet();
             while (resultSetUpdate.next()) {
                 hash = generateHashedPassword(resultSetUpdate.getString("password"));
-                System.out.println(hash);
+                //System.out.println(hash);
                 pstmt = connection.prepareStatement(query);
                 pstmt.setBytes(1, hash);
                 pstmt.setString(2, resultSetUpdate.getString("firstname"));

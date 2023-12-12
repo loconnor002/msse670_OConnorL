@@ -20,7 +20,7 @@ public class Driver {
 
         //instantiate & configure Composite obj, pass it to services, print returned output from methods
         lodge = new Lodge("Alyeska", "Girdwood");
-        guest = new LodgeGuest("Arthur", "Dent", "earth.man@h2g2.com", "17201111110");
+        guest = new LodgeGuest("Douglas", "Adams", "douglas.adams@h2g2.com", "17201111121");
 
         //add 10 rooms to lodge, (roomNumber, available=true, clean=true)
         for (int i = 0; i < 10; i++) {
@@ -45,21 +45,19 @@ public class Driver {
             System.out.println("Update database (insert a new LodgeGuest): success=" + success);
 
             // Update database (change guest's phone number)
-            //composite.getGuest().setPhone("19702345678");         //todo uncomment for demonstration
+            //composite.getGuest().setPhone("13333333333");
             success = database.updatePhone(composite);
             System.out.println("Update database (change LodgeGuest phone): success=" + success);
-
 
             //todo remove
             success = database.updatePasswordHashes();
             System.out.println("update hashes success: " + success);
 
-
             // Read from database
             guestList = database.getAll();
             success = !guestList.isEmpty();
-            System.out.println("Read database: success=" + success);// + "\n Guests from DB:");
-            database.displayDB();
+            System.out.println("Read database: success=" + success);
+            //database.displayDB();
 
             //Delete from database
             success = database.delete(composite);
@@ -77,8 +75,10 @@ public class Driver {
             success = manager.performAction("RESERVE_ROOM", composite);
             System.out.println("RESERVE ROOM success: " + success);
 
+            System.out.println("before room update" + composite.getReservation());
             success = manager.performAction("UPDATE_RESERVATION_ROOM", composite);
             System.out.println("UpdateReservation success: " + success);
+            System.out.println("after room update" + composite.getReservation());
 
             success = manager.performAction("CANCEL_RESERVATION", composite);
             System.out.println("CANCEL RESERVATION success: " + success);
@@ -87,8 +87,7 @@ public class Driver {
             System.out.println("CHECK_INVENTORY success: " + success);
 
 
-            success = manager.
-                    performAction("LOGIN_LODGE_GUEST", composite);
+            success = manager.performAction("LOGIN_LODGE_GUEST", composite);
             System.out.println("LOGIN success: " + success);
 
         } catch (Exception e) {
